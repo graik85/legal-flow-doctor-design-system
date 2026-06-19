@@ -39,8 +39,8 @@ function Dashboard({ onNavigate }) {
       {/* Header */}
       <div style={{ background: 'white', borderBottom: '1px solid var(--border-muted)', padding: '14px 28px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h1 style={{ margin: 0, fontSize: '18px', fontFamily: 'var(--font-serif)', fontWeight: 600, color: 'var(--fg-default)' }}>Dashboard</h1>
-          <p style={{ margin: 0, fontSize: '12px', color: 'var(--fg-muted)', fontFamily: 'var(--font-sans)' }}>Thursday, June 19, 2026 · {stats.hearingsThisMonth} hearings this month</p>
+          <h1 style={{ margin: 0, fontSize: '18px', fontFamily: 'var(--font-serif)', fontWeight: 600, color: 'var(--fg-default)' }}>Inicio</h1>
+          <p style={{ margin: 0, fontSize: '12px', color: 'var(--fg-muted)', fontFamily: 'var(--font-sans)' }}>Jueves, 19 de junio de 2026 · {stats.hearingsThisMonth} audiencias este mes</p>
         </div>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <button onClick={() => onNavigate('cases')} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '7px 14px', borderRadius: '6px', border: '1.5px solid var(--color-teal-400)', background: 'transparent', color: 'var(--color-teal-700)', fontSize: '13px', fontWeight: 600, fontFamily: 'var(--font-sans)', cursor: 'pointer' }}>
@@ -51,15 +51,26 @@ function Dashboard({ onNavigate }) {
       </div>
 
       <div style={{ padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        {/* PJN Alert Banner */}
+        {window.LFDData.movimientos && window.LFDData.movimientos.filter(m=>!m.read).length > 0 && (
+          <div style={{ background:'var(--color-navy-900)', borderRadius:'8px', padding:'12px 18px', display:'flex', alignItems:'center', gap:'12px' }}>
+            <span style={{ width:'8px', height:'8px', borderRadius:'50%', background:'var(--color-teal-400)', flexShrink:0 }} />
+            <span style={{ flex:1, fontSize:'13px', color:'white', fontFamily:'var(--font-sans)', fontWeight:500 }}>
+              <strong style={{ color:'var(--color-teal-300)' }}>{window.LFDData.movimientos.filter(m=>!m.read).length} movimientos nuevos</strong> en tus expedientes — PJN sincronizado hace 4 min
+            </span>
+            <span style={{ fontSize:'11px', color:'rgba(255,255,255,0.45)', fontFamily:'var(--font-sans)' }}>PJN · MEV · CABA ✓</span>
+          </div>
+        )}
+
         {/* Stats */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px' }}>
-          <StatCard label="Total Expedientes" value={stats.totalCases} sub={`+${stats.newThisWeek} this week`} color="var(--color-navy-600)"
+          <StatCard label="Total Expedientes" value={stats.totalCases} sub={`+${stats.newThisWeek} esta semana`} color="var(--color-navy-600)"
             icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>} />
-          <StatCard label="Active Matters" value={stats.activeCases} sub="74.5% of total" color="var(--color-teal-600)"
+          <StatCard label="Causas activas" value={stats.activeCases} sub="74,5% del total" color="var(--color-teal-600)"
             icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>} />
-          <StatCard label="Urgent" value={stats.urgentCases} sub="Require immediate action" color="var(--color-danger-500)"
+          <StatCard label="Urgentes" value={stats.urgentCases} sub="Requieren atención inmediata" color="var(--color-danger-500)"
             icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>} />
-          <StatCard label="Pending Signatures" value={stats.pendingSignatures} sub="Documents awaiting sign" color="var(--color-gold-500)"
+          <StatCard label="Firmas pendientes" value={stats.pendingSignatures} sub="Documentos por firmar" color="var(--color-gold-500)"
             icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M12 22h6a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v10"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10.4 19.6 8 22l-4-1 1-4 6.4-6.4"/></svg>} />
         </div>
 
@@ -67,13 +78,13 @@ function Dashboard({ onNavigate }) {
           {/* Recent Cases */}
           <div style={{ background: 'white', border: '1px solid var(--border-default)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)', overflow: 'hidden' }}>
             <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--border-muted)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--fg-default)', fontFamily: 'var(--font-sans)' }}>Recent Expedientes</span>
-              <button onClick={() => onNavigate('cases')} style={{ fontSize: '12px', color: 'var(--color-teal-700)', fontFamily: 'var(--font-sans)', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>View all →</button>
+              <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--fg-default)', fontFamily: 'var(--font-sans)' }}>Expedientes recientes</span>
+              <button onClick={() => onNavigate('cases')} style={{ fontSize: '12px', color: 'var(--color-teal-700)', fontFamily: 'var(--font-sans)', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>Ver todas →</button>
             </div>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr style={{ background: 'var(--bg-subtle)' }}>
-                  {['Case No.', 'Caption', 'Type', 'Status', 'Assigned'].map(h => (
+                  {['Expte.', 'Carátula', 'Tipo', 'Estado', 'Asignado'].map(h => (
                     <th key={h} style={{ padding: '8px 14px', fontSize: '10px', fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase', color: 'var(--fg-muted)', textAlign: 'left', fontFamily: 'var(--font-sans)', borderBottom: '1px solid var(--border-muted)', whiteSpace: 'nowrap' }}>{h}</th>
                   ))}
                 </tr>
@@ -113,30 +124,33 @@ function Dashboard({ onNavigate }) {
           {/* Today's Agenda */}
           <div style={{ background: 'white', border: '1px solid var(--border-default)', borderRadius: '8px', boxShadow: 'var(--shadow-sm)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
             <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--border-muted)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--fg-default)', fontFamily: 'var(--font-sans)' }}>Today</span>
-              <button onClick={() => onNavigate('agenda')} style={{ fontSize: '12px', color: 'var(--color-teal-700)', fontFamily: 'var(--font-sans)', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>Full calendar →</button>
+              <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--fg-default)', fontFamily: 'var(--font-sans)' }}>Movimientos</span>
+              <button onClick={() => onNavigate('agenda')} style={{ fontSize: '12px', color: 'var(--color-teal-700)', fontFamily: 'var(--font-sans)', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer' }}>Ver agenda →</button>
             </div>
             <div style={{ flex: 1, overflowY: 'auto' }}>
-              {todayEvents.map((ev, i) => (
-                <div key={i} style={{ padding: '12px 18px', borderBottom: i < todayEvents.length - 1 ? '1px solid var(--border-muted)' : 'none', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                  <div style={{ textAlign: 'right', flexShrink: 0, minWidth: '38px' }}>
-                    <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--fg-default)', fontFamily: 'var(--font-mono)' }}>{ev.time}</div>
-                  </div>
-                  <div style={{ width: '3px', alignSelf: 'stretch', borderRadius: '2px', background: eventTypeStyle[ev.type] || '#9399a6', flexShrink: 0, marginTop: '3px' }}></div>
-                  <div>
-                    <div style={{ fontSize: '12px', fontWeight: 600, color: 'var(--fg-default)', fontFamily: 'var(--font-sans)', lineHeight: 1.4 }}>{ev.title}</div>
-                    {ev.court && <div style={{ fontSize: '10px', color: 'var(--fg-muted)', fontFamily: 'var(--font-sans)', marginTop: '2px' }}>{ev.court}</div>}
-                    <span style={{ fontSize: '10px', fontWeight: 600, color: eventTypeStyle[ev.type], background: `${eventTypeStyle[ev.type]}18`, padding: '1px 5px', borderRadius: '3px', fontFamily: 'var(--font-sans)', marginTop: '4px', display: 'inline-block' }}>{eventTypeLabel[ev.type]}</span>
+              {window.LFDData.movimientos.map((mv, i) => (
+                <div key={mv.id} style={{ padding: '10px 18px', borderBottom: i < window.LFDData.movimientos.length - 1 ? '1px solid var(--border-muted)' : 'none', display: 'flex', gap: '10px', alignItems: 'flex-start', background: mv.read ? 'transparent' : 'var(--color-teal-50)' }}>
+                  <div style={{ width: '7px', height: '7px', borderRadius: '50%', marginTop: '5px', flexShrink: 0, background: mv.read ? 'var(--color-gray-200)' : mv.type === 'deadline' ? 'var(--color-danger-400)' : 'var(--color-teal-400)' }} />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
+                      <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--fg-default)', fontFamily: 'var(--font-sans)' }}>{mv.action}</span>
+                      <span style={{ fontSize: '10px', color: 'var(--fg-subtle)', fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap' }}>{mv.time}</span>
+                    </div>
+                    <div style={{ fontSize: '11px', color: 'var(--fg-muted)', fontFamily: 'var(--font-sans)', marginTop: '1px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{mv.detail}</div>
+                    <div style={{ display: 'flex', gap: '6px', marginTop: '3px', alignItems: 'center' }}>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--color-teal-700)' }}>{mv.caseId}</span>
+                      <span style={{ fontSize: '9px', fontWeight: 700, padding: '1px 5px', borderRadius: '3px', background: mv.source === 'PJN' ? 'var(--color-navy-100)' : 'var(--color-gray-100)', color: mv.source === 'PJN' ? 'var(--color-navy-700)' : 'var(--fg-muted)', fontFamily: 'var(--font-mono)' }}>{mv.source}</span>
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
             <div style={{ padding: '12px 18px', borderTop: '1px solid var(--border-muted)', background: 'var(--bg-subtle)' }}>
-              <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--fg-muted)', fontFamily: 'var(--font-sans)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.07em' }}>Upcoming</div>
-              {upcomingEvents.slice(0, 3).map((ev, i) => (
+              <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--fg-muted)', fontFamily: 'var(--font-sans)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.07em' }}>Próximos vencimientos</div>
+              {window.LFDData.vencimientos.filter(v=>!v.done&&v.date>='2026-06-19').slice(0,3).map((v, i) => (
                 <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 0' }}>
-                  <span style={{ fontSize: '11px', color: 'var(--fg-default)', fontFamily: 'var(--font-sans)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginRight: '8px' }}>{ev.title}</span>
-                  <span style={{ fontSize: '10px', fontWeight: 600, color: ev.priority === 'high' ? 'var(--color-danger-600)' : 'var(--fg-muted)', whiteSpace: 'nowrap', fontFamily: 'var(--font-sans)' }}>{ev.date}</span>
+                  <span style={{ fontSize: '11px', color: 'var(--fg-default)', fontFamily: 'var(--font-sans)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginRight: '8px' }}>{v.title}</span>
+                  <span style={{ fontSize: '10px', fontWeight: 600, color: v.priority === 'high' ? 'var(--color-danger-600)' : 'var(--fg-muted)', whiteSpace: 'nowrap', fontFamily: 'var(--font-sans)' }}>{v.date.slice(8)} {['','','','','','','jun','jul','ago'][parseInt(v.date.slice(5,7))]}</span>
                 </div>
               ))}
             </div>

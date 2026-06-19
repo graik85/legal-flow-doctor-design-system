@@ -63,6 +63,46 @@ window.LFDData = {
     { name: 'Convenio de honorarios.docx', size: '28 KB', date: '2024-01-15', user: 'Roberto Pérez', type: 'doc' }
   ],
 
+  pjnStatus: {
+    lastSync: 'hace 4 min',
+    status: 'online',
+    pendingAlerts: 3,
+    jurisdictions: ['PJN', 'MEV', 'PBA', 'CABA']
+  },
+
+  movimientos: [
+    { id: 'm1', caseId: 'LFD-2024-0091', caseTitle: 'García S.A. v. Municipalidad', time: '08:42', date: 'Hoy', type: 'auto', action: 'Nueva providencia', detail: 'Se corre traslado del escrito de fs. 234/241 por el término de ley.', source: 'PJN', read: false },
+    { id: 'm2', caseId: 'LFD-2024-0087', caseTitle: 'Torres c/ Log. del Sur', time: '07:15', date: 'Hoy', type: 'deadline', action: 'Vencimiento hoy', detail: 'Contestación de demanda vence a las 11:00 hs — Tribunal del Trabajo N° 5.', source: 'sistema', read: false },
+    { id: 'm3', caseId: 'LFD-2024-0070', caseTitle: 'Farmacéutica Austral c/ ANMAT', time: '06:30', date: 'Hoy', type: 'auto', action: 'Movimiento registrado', detail: 'Agregado dictamen fiscal. Autos a despacho.', source: 'PJN', read: false },
+    { id: 'm4', caseId: 'LFD-2024-0082', caseTitle: 'Martínez v. Banco Nacional', time: '18:22', date: 'Ayer', type: 'auto', action: 'Sentencia parcial', detail: 'Se dicta sentencia interlocutoria. Ver texto completo en PJN.', source: 'PJN', read: true },
+    { id: 'm5', caseId: 'LFD-2024-0079', caseTitle: 'Pampas v. Distribuidora Norte', time: '15:10', date: 'Ayer', type: 'deadline', action: 'Recordatorio automático', detail: 'Escrito de apelación vence mañana. ¿Ya lo preparaste?', source: 'sistema', read: true },
+  ],
+
+  vencimientos: [
+    { id: 'v1', date: '2026-06-19', caseId: 'LFD-2024-0087', title: 'Contestación de demanda', court: 'Tribunal del Trabajo N° 5', priority: 'high', semaforo: 'rojo', done: false },
+    { id: 'v2', date: '2026-06-20', caseId: 'LFD-2024-0079', title: 'Escrito de apelación', court: 'Cámara Comercial Sala D', priority: 'high', semaforo: 'rojo', done: false },
+    { id: 'v3', date: '2026-06-22', caseId: 'LFD-2024-0070', title: 'Audiencia preliminar', court: 'Cámara Federal CA', priority: 'normal', semaforo: 'rojo', done: false, type: 'hearing' },
+    { id: 'v4', date: '2026-06-24', caseId: 'LFD-2024-0075', title: 'Declaración pericial', court: 'Juzgado Civil N° 3', priority: 'normal', semaforo: 'amarillo', done: false, type: 'hearing' },
+    { id: 'v5', date: '2026-06-26', caseId: 'LFD-2024-0068', title: 'Respuesta a AFIP resolución 4521', court: 'Tribunal Fiscal', priority: 'high', semaforo: 'rojo', done: false },
+    { id: 'v6', date: '2026-06-28', caseId: 'LFD-2024-0091', title: 'Prueba pericial contable — presentación', court: 'Juzgado Comercial N° 12', priority: 'normal', semaforo: 'amarillo', done: false },
+    { id: 'v7', date: '2026-07-03', caseId: 'LFD-2024-0082', title: 'Próxima audiencia — Juzgado Civil', court: 'Juzgado Civil N° 7', priority: 'normal', semaforo: 'verde', done: false, type: 'hearing' },
+    { id: 'v8', date: '2026-07-08', caseId: 'LFD-2024-0049', title: 'Vencimiento medida cautelar', court: 'Juzgado Civil N° 9', priority: 'high', semaforo: 'rojo', done: false },
+    { id: 'v9', date: '2026-06-15', caseId: 'LFD-2024-0055', title: 'Presentación de alegatos', court: 'Juzgado Comercial N° 8', priority: 'normal', semaforo: 'verde', done: true },
+    { id: 'v10', date: '2026-06-10', caseId: 'LFD-2024-0061', title: 'Firma acuerdo extrajudicial', court: 'Juzgado Civil N° 15', priority: 'normal', semaforo: 'amarillo', done: true },
+  ],
+
+  honorarios: {
+    pendingTotal: 4820000,
+    billedThisMonth: 1250000,
+    collectedThisMonth: 890000,
+    byArea: [
+      { area: 'Comercial', amount: 2100000, pct: 44 },
+      { area: 'Civil',     amount: 1200000, pct: 25 },
+      { area: 'Laboral',   amount: 900000,  pct: 19 },
+      { area: 'Otro',      amount: 620000,  pct: 12 },
+    ]
+  },
+
   parties: [
     { role: 'Plaintiff', name: 'García Inversiones S.A.', type: 'Corporation', cuit: '30-71234567-8', attorney: 'Sarah Chen', contact: 'Dr. Pablo García (CEO)' },
     { role: 'Defendant', name: 'Municipalidad de Buenos Aires', type: 'Government', cuit: '34-99902018-4', attorney: 'Dr. Ramón Suárez (PD Office)', contact: 'Procuración General' },

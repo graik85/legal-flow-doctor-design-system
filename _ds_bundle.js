@@ -1,4 +1,4 @@
-/* @ds-bundle: {"format":3,"namespace":"LegalFlowDoctorDesignSystem_fa7d52","components":[{"name":"Avatar","sourcePath":"components/core/Avatar.jsx"},{"name":"Badge","sourcePath":"components/core/Badge.jsx"},{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"Divider","sourcePath":"components/core/Divider.jsx"},{"name":"Input","sourcePath":"components/core/Input.jsx"},{"name":"Select","sourcePath":"components/core/Select.jsx"},{"name":"StatusPill","sourcePath":"components/core/StatusPill.jsx"},{"name":"Tag","sourcePath":"components/core/Tag.jsx"}],"sourceHashes":{"components/core/Avatar.jsx":"17e629a0624f","components/core/Badge.jsx":"0d5c067c0a2b","components/core/Button.jsx":"cfe9d7ab927a","components/core/Card.jsx":"4d29093a51c1","components/core/Divider.jsx":"94ce0f091e96","components/core/Input.jsx":"20068ad424c6","components/core/Select.jsx":"3c442c3d773c","components/core/StatusPill.jsx":"fddcfe2fccb7","components/core/Tag.jsx":"744339f03095","ui_kits/app/App.jsx":"cad2e71c6bb6","ui_kits/app/CaseDetail.jsx":"8be753233dfb","ui_kits/app/CaseList.jsx":"5d4b4735b400","ui_kits/app/Dashboard.jsx":"cb4ab8cf9557","ui_kits/app/Sidebar.jsx":"8f2fe1a7466b","ui_kits/app/data.js":"5a2aafa93deb"},"inlinedExternals":[],"unexposedExports":[]} */
+/* @ds-bundle: {"format":3,"namespace":"LegalFlowDoctorDesignSystem_fa7d52","components":[{"name":"Avatar","sourcePath":"components/core/Avatar.jsx"},{"name":"Badge","sourcePath":"components/core/Badge.jsx"},{"name":"Button","sourcePath":"components/core/Button.jsx"},{"name":"Card","sourcePath":"components/core/Card.jsx"},{"name":"Divider","sourcePath":"components/core/Divider.jsx"},{"name":"Input","sourcePath":"components/core/Input.jsx"},{"name":"Select","sourcePath":"components/core/Select.jsx"},{"name":"StatusPill","sourcePath":"components/core/StatusPill.jsx"},{"name":"Tag","sourcePath":"components/core/Tag.jsx"}],"sourceHashes":{"components/core/Avatar.jsx":"17e629a0624f","components/core/Badge.jsx":"0d5c067c0a2b","components/core/Button.jsx":"cfe9d7ab927a","components/core/Card.jsx":"4d29093a51c1","components/core/Divider.jsx":"94ce0f091e96","components/core/Input.jsx":"20068ad424c6","components/core/Select.jsx":"3c442c3d773c","components/core/StatusPill.jsx":"fddcfe2fccb7","components/core/Tag.jsx":"744339f03095","ui_kits/app/Agenda.jsx":"f30152563e33","ui_kits/app/App.jsx":"4b94d3e03e6f","ui_kits/app/CaseDetail.jsx":"8be753233dfb","ui_kits/app/CaseList.jsx":"5d4b4735b400","ui_kits/app/Dashboard.jsx":"3f8420d794a8","ui_kits/app/Jurisprudencia.jsx":"c961fb8fd49e","ui_kits/app/Sidebar.jsx":"c9a04e89849d","ui_kits/app/data.js":"8a638bada666"},"inlinedExternals":[],"unexposedExports":[]} */
 
 (() => {
 
@@ -1087,6 +1087,775 @@ function Tag({
 Object.assign(__ds_scope, { Tag });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "components/core/Tag.jsx", error: String((e && e.message) || e) }); }
 
+// ui_kits/app/Agenda.jsx
+try { (() => {
+// Legal Flow Doctor — Agenda & Vencimientos
+// Exports: Agenda
+
+const MONTHS = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+const DAYS_SHORT = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+function Agenda({
+  onNavigate
+}) {
+  const {
+    vencimientos,
+    todayEvents,
+    cases
+  } = window.LFDData;
+  const [currentMonth, setCurrentMonth] = React.useState(5); // June = 5
+  const [currentYear] = React.useState(2026);
+  const [activeView, setActiveView] = React.useState('mes');
+  const [selectedDay, setSelectedDay] = React.useState(19);
+
+  // Build calendar grid for current month
+  const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const daysInPrev = new Date(currentYear, currentMonth, 0).getDate();
+  const cells = [];
+  for (let i = firstDay - 1; i >= 0; i--) cells.push({
+    day: daysInPrev - i,
+    current: false
+  });
+  for (let d = 1; d <= daysInMonth; d++) cells.push({
+    day: d,
+    current: true
+  });
+  while (cells.length % 7 !== 0) cells.push({
+    day: cells.length - daysInMonth - firstDay + 1,
+    current: false
+  });
+
+  // Map vencimientos to dates
+  const vByDate = {};
+  vencimientos.forEach(v => {
+    const d = parseInt(v.date.split('-')[2]);
+    const m = parseInt(v.date.split('-')[1]) - 1;
+    if (m === currentMonth) {
+      if (!vByDate[d]) vByDate[d] = [];
+      vByDate[d].push(v);
+    }
+  });
+  const selectedDateStr = `2026-${String(currentMonth + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
+  const selectedVenc = vencimientos.filter(v => v.date === selectedDateStr);
+  const isToday = d => d === 19 && currentMonth === 5 && currentYear === 2026;
+  const priorityColor = {
+    high: '#dc2626',
+    normal: '#244876'
+  };
+  const priorityBg = {
+    high: '#fee2e2',
+    normal: '#dfe8f2'
+  };
+  const priorityLabel = {
+    high: 'Urgente',
+    normal: 'Normal'
+  };
+  const statusColors = {
+    active: {
+      bg: '#dcfaec',
+      fg: '#166534',
+      dot: '#22a35a',
+      label: 'Activo'
+    },
+    urgent: {
+      bg: '#fee2e2',
+      fg: '#991b1b',
+      dot: '#dc2626',
+      label: 'Urgente'
+    },
+    pending: {
+      bg: '#fef9c3',
+      fg: '#974d00',
+      dot: '#d97706',
+      label: 'Pendiente'
+    },
+    review: {
+      bg: '#dbeafe',
+      fg: '#1d4ed8',
+      dot: '#3b82f6',
+      label: 'En revisión'
+    },
+    closed: {
+      bg: '#eceff4',
+      fg: '#5a6170',
+      dot: '#737b8c',
+      label: 'Cerrado'
+    },
+    settled: {
+      bg: '#d0f4f0',
+      fg: '#106b61',
+      dot: '#14867a',
+      label: 'Resuelto'
+    }
+  };
+  const upcoming = vencimientos.filter(v => !v.done && v.date >= '2026-06-19').sort((a, b) => a.date.localeCompare(b.date)).slice(0, 8);
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'hidden',
+      background: 'var(--bg-subtle)'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: 'white',
+      borderBottom: '1px solid var(--border-muted)',
+      padding: '14px 28px',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", {
+    style: {
+      margin: 0,
+      fontSize: '18px',
+      fontFamily: 'var(--font-serif)',
+      fontWeight: 600,
+      color: 'var(--fg-default)'
+    }
+  }, "Agenda"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      margin: 0,
+      fontSize: '12px',
+      color: 'var(--fg-muted)',
+      fontFamily: 'var(--font-sans)'
+    }
+  }, vencimientos.filter(v => !v.done && v.date >= '2026-06-19').length, " vencimientos pr\xF3ximos \xB7 ", todayEvents.length, " eventos hoy")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: '8px',
+      alignItems: 'center'
+    }
+  }, ['mes', 'lista'].map(v => /*#__PURE__*/React.createElement("button", {
+    key: v,
+    onClick: () => setActiveView(v),
+    style: {
+      padding: '5px 14px',
+      borderRadius: '5px',
+      border: '1.5px solid ' + (activeView === v ? 'var(--color-teal-500)' : 'var(--border-default)'),
+      background: activeView === v ? 'var(--color-teal-50)' : 'white',
+      color: activeView === v ? 'var(--color-teal-700)' : 'var(--fg-muted)',
+      fontSize: '12px',
+      fontFamily: 'var(--font-sans)',
+      fontWeight: 600,
+      cursor: 'pointer'
+    }
+  }, v === 'mes' ? 'Vista mes' : 'Lista')), /*#__PURE__*/React.createElement("button", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '6px',
+      padding: '7px 14px',
+      borderRadius: '6px',
+      border: 'none',
+      background: 'var(--color-teal-600)',
+      color: 'white',
+      fontSize: '12px',
+      fontFamily: 'var(--font-sans)',
+      fontWeight: 600,
+      cursor: 'pointer'
+    }
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "13",
+    height: "13",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2.5"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M12 5v14M5 12h14"
+  })), "Nuevo vencimiento"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      overflowY: 'auto',
+      padding: '20px 28px',
+      display: 'flex',
+      gap: '16px'
+    }
+  }, activeView === 'mes' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '12px'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: 'white',
+      borderRadius: '8px',
+      border: '1px solid var(--border-default)',
+      boxShadow: 'var(--shadow-sm)',
+      overflow: 'hidden'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: '12px 18px',
+      borderBottom: '1px solid var(--border-muted)'
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: () => setCurrentMonth(m => Math.max(0, m - 1)),
+    style: {
+      width: '28px',
+      height: '28px',
+      borderRadius: '5px',
+      border: '1px solid var(--border-default)',
+      background: 'white',
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: 'var(--fg-muted)'
+    }
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "14",
+    height: "14",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M15 18l-6-6 6-6"
+  }))), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: '15px',
+      fontFamily: 'var(--font-serif)',
+      fontWeight: 600,
+      color: 'var(--fg-default)'
+    }
+  }, MONTHS[currentMonth], " ", currentYear), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setCurrentMonth(m => Math.min(11, m + 1)),
+    style: {
+      width: '28px',
+      height: '28px',
+      borderRadius: '5px',
+      border: '1px solid var(--border-default)',
+      background: 'white',
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: 'var(--fg-muted)'
+    }
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "14",
+    height: "14",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M9 18l6-6-6-6"
+  })))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(7,1fr)',
+      padding: '8px 12px 4px'
+    }
+  }, DAYS_SHORT.map(d => /*#__PURE__*/React.createElement("div", {
+    key: d,
+    style: {
+      textAlign: 'center',
+      fontSize: '10px',
+      fontWeight: 700,
+      color: 'var(--fg-subtle)',
+      fontFamily: 'var(--font-sans)',
+      letterSpacing: '0.06em',
+      textTransform: 'uppercase',
+      padding: '4px 0'
+    }
+  }, d))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(7,1fr)',
+      padding: '0 12px 12px',
+      gap: '2px'
+    }
+  }, cells.map((cell, i) => {
+    const hasEvents = cell.current && vByDate[cell.day];
+    const isSelected = cell.current && cell.day === selectedDay;
+    const today = isToday(cell.day) && cell.current;
+    return /*#__PURE__*/React.createElement("div", {
+      key: i,
+      onClick: () => cell.current && setSelectedDay(cell.day),
+      style: {
+        borderRadius: '7px',
+        padding: '6px 4px',
+        minHeight: '56px',
+        cursor: cell.current ? 'pointer' : 'default',
+        background: isSelected ? 'var(--color-teal-600)' : today ? 'var(--color-navy-900)' : 'transparent',
+        transition: 'background 100ms',
+        position: 'relative'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        textAlign: 'center',
+        fontSize: '13px',
+        fontWeight: today || isSelected ? 700 : 400,
+        color: isSelected || today ? 'white' : cell.current ? 'var(--fg-default)' : 'var(--fg-subtle)',
+        fontFamily: 'var(--font-sans)',
+        marginBottom: '4px'
+      }
+    }, cell.day), hasEvents && /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: '2px',
+        justifyContent: 'center'
+      }
+    }, vByDate[cell.day].slice(0, 3).map((v, vi) => /*#__PURE__*/React.createElement("div", {
+      key: vi,
+      style: {
+        width: '7px',
+        height: '7px',
+        borderRadius: '50%',
+        background: isSelected ? 'rgba(255,255,255,0.7)' : v.done ? 'var(--color-gray-300)' : v.priority === 'high' ? 'var(--color-danger-400)' : 'var(--color-teal-400)'
+      }
+    }))));
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: 'white',
+      border: '1px solid var(--border-default)',
+      borderRadius: '8px',
+      boxShadow: 'var(--shadow-sm)',
+      overflow: 'hidden'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '12px 18px',
+      borderBottom: '1px solid var(--border-muted)'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: '13px',
+      fontWeight: 700,
+      color: 'var(--fg-default)',
+      fontFamily: 'var(--font-sans)'
+    }
+  }, "Hoy \u2014 ", selectedDay, " de ", MONTHS[currentMonth])), selectedVenc.length === 0 ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '20px 18px',
+      fontSize: '13px',
+      color: 'var(--fg-subtle)',
+      fontFamily: 'var(--font-sans)'
+    }
+  }, "Sin vencimientos este d\xEDa.") : selectedVenc.map((v, i) => /*#__PURE__*/React.createElement("div", {
+    key: v.id,
+    style: {
+      padding: '12px 18px',
+      borderBottom: i < selectedVenc.length - 1 ? '1px solid var(--border-muted)' : 'none',
+      display: 'flex',
+      gap: '12px',
+      alignItems: 'flex-start'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: '10px',
+      height: '10px',
+      borderRadius: '50%',
+      marginTop: '4px',
+      background: v.done ? 'var(--color-gray-300)' : v.priority === 'high' ? 'var(--color-danger-400)' : 'var(--color-teal-400)',
+      flexShrink: 0
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: '13px',
+      fontWeight: 600,
+      color: v.done ? 'var(--fg-subtle)' : 'var(--fg-default)',
+      fontFamily: 'var(--font-sans)',
+      textDecoration: v.done ? 'line-through' : 'none'
+    }
+  }, v.title), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: '11px',
+      color: 'var(--fg-muted)',
+      fontFamily: 'var(--font-sans)',
+      marginTop: '2px'
+    }
+  }, v.court), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontFamily: 'var(--font-mono)',
+      fontSize: '10px',
+      color: 'var(--color-teal-700)',
+      marginTop: '3px'
+    }
+  }, v.caseId)), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: '10px',
+      fontWeight: 700,
+      padding: '2px 8px',
+      borderRadius: '999px',
+      background: v.done ? 'var(--color-gray-100)' : priorityBg[v.priority],
+      color: v.done ? 'var(--fg-subtle)' : priorityColor[v.priority],
+      fontFamily: 'var(--font-sans)',
+      whiteSpace: 'nowrap'
+    }
+  }, v.done ? 'Cumplido' : priorityLabel[v.priority]))), selectedDay === 19 && currentMonth === 5 && /*#__PURE__*/React.createElement(React.Fragment, null, todayEvents.map((ev, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      padding: '12px 18px',
+      borderTop: '1px solid var(--border-muted)',
+      display: 'flex',
+      gap: '12px',
+      alignItems: 'flex-start'
+    }
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "14",
+    height: "14",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: ev.type === 'hearing' ? '#244876' : ev.type === 'deadline' ? '#dc2626' : '#14867a',
+    strokeWidth: "2",
+    style: {
+      marginTop: 2,
+      flexShrink: 0
+    }
+  }, /*#__PURE__*/React.createElement("rect", {
+    x: "3",
+    y: "4",
+    width: "18",
+    height: "18",
+    rx: "2"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "16",
+    y1: "2",
+    x2: "16",
+    y2: "6"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "8",
+    y1: "2",
+    x2: "8",
+    y2: "6"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "3",
+    y1: "10",
+    x2: "21",
+    y2: "10"
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: '13px',
+      fontWeight: 500,
+      color: 'var(--fg-default)',
+      fontFamily: 'var(--font-sans)'
+    }
+  }, ev.title), ev.court && /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: '11px',
+      color: 'var(--fg-muted)',
+      fontFamily: 'var(--font-sans)',
+      marginTop: '2px'
+    }
+  }, ev.court)), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontFamily: 'var(--font-mono)',
+      fontSize: '12px',
+      fontWeight: 700,
+      color: 'var(--fg-default)',
+      whiteSpace: 'nowrap'
+    }
+  }, ev.time)))))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: '280px',
+      flexShrink: 0,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '12px'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: 'white',
+      border: '1px solid var(--border-default)',
+      borderRadius: '8px',
+      boxShadow: 'var(--shadow-sm)',
+      overflow: 'hidden'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '12px 16px',
+      borderBottom: '1px solid var(--border-muted)',
+      background: 'var(--color-navy-900)'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: '12px',
+      fontWeight: 700,
+      color: 'white',
+      fontFamily: 'var(--font-sans)'
+    }
+  }, "Pr\xF3ximos vencimientos")), upcoming.map((v, i) => {
+    const d = new Date(v.date + 'T12:00:00');
+    const dStr = `${d.getDate()} ${MONTHS[d.getMonth()].slice(0, 3)}`;
+    const isUrgent = v.priority === 'high';
+    return /*#__PURE__*/React.createElement("div", {
+      key: v.id,
+      style: {
+        padding: '10px 16px',
+        borderBottom: i < upcoming.length - 1 ? '1px solid var(--border-muted)' : 'none',
+        display: 'flex',
+        gap: '10px',
+        alignItems: 'flex-start'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        flexShrink: 0,
+        textAlign: 'center',
+        minWidth: '36px'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: '16px',
+        fontWeight: 800,
+        color: isUrgent ? 'var(--color-danger-500)' : 'var(--fg-default)',
+        fontFamily: 'var(--font-sans)',
+        lineHeight: 1
+      }
+    }, d.getDate()), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: '9px',
+        fontWeight: 700,
+        color: 'var(--fg-subtle)',
+        fontFamily: 'var(--font-sans)',
+        textTransform: 'uppercase',
+        letterSpacing: '0.05em'
+      }
+    }, MONTHS[d.getMonth()].slice(0, 3))), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1,
+        minWidth: 0
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: '12px',
+        fontWeight: 500,
+        color: 'var(--fg-default)',
+        fontFamily: 'var(--font-sans)',
+        lineHeight: 1.3,
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap'
+      }
+    }, v.title), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontFamily: 'var(--font-mono)',
+        fontSize: '10px',
+        color: 'var(--color-teal-700)',
+        marginTop: '3px'
+      }
+    }, v.caseId)), isUrgent && /*#__PURE__*/React.createElement("span", {
+      style: {
+        width: '7px',
+        height: '7px',
+        borderRadius: '50%',
+        background: 'var(--color-danger-400)',
+        flexShrink: 0,
+        marginTop: '4px'
+      }
+    }));
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: 'white',
+      border: '1px solid var(--border-default)',
+      borderRadius: '8px',
+      padding: '14px 16px',
+      boxShadow: 'var(--shadow-sm)'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: '11px',
+      fontWeight: 700,
+      color: 'var(--fg-muted)',
+      fontFamily: 'var(--font-sans)',
+      textTransform: 'uppercase',
+      letterSpacing: '0.07em',
+      marginBottom: '10px'
+    }
+  }, "Estado PJN / MEV"), [['PJN', true], ['MEV', true], ['PBA', true], ['CABA', false]].map(([name, online]) => /*#__PURE__*/React.createElement("div", {
+    key: name,
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: '5px 0',
+      borderBottom: '1px solid var(--border-muted)'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: '12px',
+      fontFamily: 'var(--font-mono)',
+      color: 'var(--fg-default)'
+    }
+  }, name), /*#__PURE__*/React.createElement("span", {
+    style: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '5px',
+      fontSize: '11px',
+      fontWeight: 600,
+      color: online ? 'var(--color-success-600)' : 'var(--color-danger-600)',
+      fontFamily: 'var(--font-sans)'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      width: '6px',
+      height: '6px',
+      borderRadius: '50%',
+      background: online ? 'var(--color-success-400)' : 'var(--color-danger-400)'
+    }
+  }), online ? 'En línea' : 'Caído'))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: '10px',
+      color: 'var(--fg-subtle)',
+      fontFamily: 'var(--font-sans)',
+      marginTop: '8px'
+    }
+  }, "\xDAltima sincronizaci\xF3n: hace 4 min")))), activeView === 'lista' && /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: 'white',
+      border: '1px solid var(--border-default)',
+      borderRadius: '8px',
+      boxShadow: 'var(--shadow-sm)',
+      overflow: 'hidden'
+    }
+  }, /*#__PURE__*/React.createElement("table", {
+    style: {
+      width: '100%',
+      borderCollapse: 'collapse'
+    }
+  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", {
+    style: {
+      background: 'var(--bg-subtle)'
+    }
+  }, ['Fecha', 'Vencimiento', 'Expediente', 'Tribunal', 'Prioridad', 'Estado'].map(h => /*#__PURE__*/React.createElement("th", {
+    key: h,
+    style: {
+      padding: '9px 14px',
+      fontSize: '10px',
+      fontWeight: 700,
+      letterSpacing: '0.07em',
+      textTransform: 'uppercase',
+      color: 'var(--fg-muted)',
+      textAlign: 'left',
+      fontFamily: 'var(--font-sans)',
+      borderBottom: '1px solid var(--border-default)',
+      whiteSpace: 'nowrap'
+    }
+  }, h)))), /*#__PURE__*/React.createElement("tbody", null, vencimientos.sort((a, b) => a.date.localeCompare(b.date)).map((v, i) => {
+    const d = new Date(v.date + 'T12:00:00');
+    const overdue = !v.done && v.date < '2026-06-19';
+    return /*#__PURE__*/React.createElement("tr", {
+      key: v.id,
+      style: {
+        background: i % 2 === 0 ? 'white' : 'var(--bg-subtle)',
+        cursor: 'pointer'
+      },
+      onMouseEnter: e => e.currentTarget.style.background = 'var(--color-teal-50)',
+      onMouseLeave: e => e.currentTarget.style.background = i % 2 === 0 ? 'white' : 'var(--bg-subtle)'
+    }, /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: '10px 14px',
+        borderBottom: '1px solid var(--border-muted)',
+        whiteSpace: 'nowrap'
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontFamily: 'var(--font-mono)',
+        fontSize: '12px',
+        color: overdue ? 'var(--color-danger-600)' : 'var(--fg-default)',
+        fontWeight: overdue ? 700 : 400
+      }
+    }, d.getDate(), " ", MONTHS[d.getMonth()].slice(0, 3), " ", d.getFullYear())), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: '10px 14px',
+        borderBottom: '1px solid var(--border-muted)'
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: '13px',
+        fontWeight: 500,
+        color: v.done ? 'var(--fg-subtle)' : 'var(--fg-default)',
+        fontFamily: 'var(--font-sans)',
+        textDecoration: v.done ? 'line-through' : 'none'
+      }
+    }, v.title)), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: '10px 14px',
+        borderBottom: '1px solid var(--border-muted)',
+        whiteSpace: 'nowrap'
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontFamily: 'var(--font-mono)',
+        fontSize: '11px',
+        color: 'var(--color-teal-700)'
+      }
+    }, v.caseId)), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: '10px 14px',
+        borderBottom: '1px solid var(--border-muted)',
+        maxWidth: '180px'
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: '11px',
+        color: 'var(--fg-muted)',
+        fontFamily: 'var(--font-sans)',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        display: 'block'
+      }
+    }, v.court)), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: '10px 14px',
+        borderBottom: '1px solid var(--border-muted)',
+        whiteSpace: 'nowrap'
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: '11px',
+        fontWeight: 600,
+        padding: '2px 8px',
+        borderRadius: '999px',
+        background: overdue ? 'var(--color-danger-100)' : priorityBg[v.priority],
+        color: overdue ? 'var(--color-danger-700)' : priorityColor[v.priority],
+        fontFamily: 'var(--font-sans)'
+      }
+    }, overdue ? 'Vencido' : priorityLabel[v.priority])), /*#__PURE__*/React.createElement("td", {
+      style: {
+        padding: '10px 14px',
+        borderBottom: '1px solid var(--border-muted)',
+        whiteSpace: 'nowrap'
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: '11px',
+        fontWeight: 600,
+        color: v.done ? 'var(--color-success-700)' : 'var(--fg-muted)',
+        fontFamily: 'var(--font-sans)'
+      }
+    }, v.done ? '✓ Cumplido' : 'Pendiente')));
+  })))))));
+}
+Object.assign(window, {
+  Agenda
+});
+})(); } catch (e) { __ds_ns.__errors.push({ path: "ui_kits/app/Agenda.jsx", error: String((e && e.message) || e) }); }
+
 // ui_kits/app/App.jsx
 try { (() => {
 // Legal Flow Doctor — App Shell
@@ -1094,6 +1863,8 @@ try { (() => {
 
 function PlaceholderView({
   title,
+  subtitle,
+  features,
   icon
 }) {
   return /*#__PURE__*/React.createElement("div", {
@@ -1104,33 +1875,112 @@ function PlaceholderView({
       alignItems: 'center',
       justifyContent: 'center',
       background: 'var(--bg-subtle)',
-      gap: '12px'
+      padding: '48px 32px'
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      width: '56px',
-      height: '56px',
-      borderRadius: '12px',
-      background: 'var(--bg-muted)',
+      maxWidth: '480px',
+      width: '100%',
+      textAlign: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: '72px',
+      height: '72px',
+      borderRadius: '16px',
+      background: 'var(--color-navy-900)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      color: 'var(--fg-subtle)'
+      color: 'var(--color-teal-300)',
+      margin: '0 auto 20px'
     }
-  }, icon), /*#__PURE__*/React.createElement("div", {
+  }, icon), /*#__PURE__*/React.createElement("h2", {
     style: {
-      fontSize: '16px',
+      margin: '0 0 8px',
+      fontSize: '22px',
       fontFamily: 'var(--font-serif)',
       fontWeight: 600,
-      color: 'var(--fg-muted)'
+      color: 'var(--fg-default)'
     }
-  }, title), /*#__PURE__*/React.createElement("div", {
+  }, title), subtitle && /*#__PURE__*/React.createElement("p", {
+    style: {
+      margin: '0 0 24px',
+      fontSize: '14px',
+      color: 'var(--fg-muted)',
+      fontFamily: 'var(--font-sans)',
+      lineHeight: 1.6
+    }
+  }, subtitle), features && features.length > 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: 'white',
+      border: '1px solid var(--border-default)',
+      borderRadius: '10px',
+      padding: '20px 24px',
+      boxShadow: 'var(--shadow-sm)',
+      textAlign: 'left',
+      marginBottom: '20px'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: '11px',
+      fontWeight: 700,
+      color: 'var(--fg-muted)',
+      letterSpacing: '0.08em',
+      textTransform: 'uppercase',
+      fontFamily: 'var(--font-sans)',
+      marginBottom: '12px'
+    }
+  }, "Features planificados"), features.map((f, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '10px',
+      padding: '7px 0',
+      borderBottom: i < features.length - 1 ? '1px solid var(--border-muted)' : 'none'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: '18px',
+      height: '18px',
+      borderRadius: '50%',
+      border: '2px dashed var(--color-teal-300)',
+      flexShrink: 0
+    }
+  }), /*#__PURE__*/React.createElement("span", {
     style: {
       fontSize: '13px',
-      fontFamily: 'var(--font-sans)',
-      color: 'var(--fg-subtle)'
+      color: 'var(--fg-default)',
+      fontFamily: 'var(--font-sans)'
     }
-  }, "Esta secci\xF3n no est\xE1 prototipada en este kit."));
+  }, f)))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '8px',
+      padding: '8px 16px',
+      borderRadius: '999px',
+      background: 'var(--color-navy-100)',
+      color: 'var(--color-navy-800)',
+      fontSize: '12px',
+      fontWeight: 600,
+      fontFamily: 'var(--font-sans)'
+    }
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "13",
+    height: "13",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2"
+  }, /*#__PURE__*/React.createElement("circle", {
+    cx: "12",
+    cy: "12",
+    r: "10"
+  }), /*#__PURE__*/React.createElement("polyline", {
+    points: "12 6 12 12 16 14"
+  })), "En desarrollo \u2014 pr\xF3ximamente")));
 }
 function App() {
   const [view, setView] = React.useState('dashboard');
@@ -1147,57 +1997,48 @@ function App() {
     setSelectedCase(null);
     setView('cases');
   };
+  const icon = d => /*#__PURE__*/React.createElement("svg", {
+    width: "32",
+    height: "32",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.5",
+    dangerouslySetInnerHTML: {
+      __html: d
+    }
+  });
   const placeholders = {
-    agenda: {
-      title: 'Agenda',
+    pruebas: {
+      title: 'Gestión de Pruebas',
+      subtitle: 'Control del ciclo de vida de cada prueba — testimonial, confesional, informativa y pericial — desde el ofrecimiento hasta la producción.',
+      features: ['Prueba testimonial — testigos con estado del ciclo (ofrecida → admitida → notificada → producida)', 'Prueba confesional — absolución de posiciones con seguimiento', 'Prueba informativa — oficios a bancos, ANSES, AFIP, registros', 'Prueba pericial — médica, contable, ingeniería; análisis con IA integrado', 'Punteo de expediente — checklist de estado para avanzar de etapa', 'Sistema de semáforo: 🔴 vencimiento procesal · 🟡 compromiso · 🟢 tarea', 'Alertas automáticas con 90 / 30 / 15 / 7 días de anticipación'],
       icon: /*#__PURE__*/React.createElement("svg", {
-        width: "28",
-        height: "28",
-        viewBox: "0 0 24 24",
-        fill: "none",
-        stroke: "currentColor",
-        strokeWidth: "1.5"
-      }, /*#__PURE__*/React.createElement("rect", {
-        x: "3",
-        y: "4",
-        width: "18",
-        height: "18",
-        rx: "2"
-      }), /*#__PURE__*/React.createElement("line", {
-        x1: "16",
-        y1: "2",
-        x2: "16",
-        y2: "6"
-      }), /*#__PURE__*/React.createElement("line", {
-        x1: "8",
-        y1: "2",
-        x2: "8",
-        y2: "6"
-      }), /*#__PURE__*/React.createElement("line", {
-        x1: "3",
-        y1: "10",
-        x2: "21",
-        y2: "10"
-      }))
-    },
-    documents: {
-      title: 'Documentos',
-      icon: /*#__PURE__*/React.createElement("svg", {
-        width: "28",
-        height: "28",
+        width: "32",
+        height: "32",
         viewBox: "0 0 24 24",
         fill: "none",
         stroke: "currentColor",
         strokeWidth: "1.5"
       }, /*#__PURE__*/React.createElement("path", {
-        d: "M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"
+        d: "M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"
+      }), /*#__PURE__*/React.createElement("rect", {
+        x: "9",
+        y: "3",
+        width: "6",
+        height: "4",
+        rx: "1"
+      }), /*#__PURE__*/React.createElement("path", {
+        d: "m9 12 2 2 4-4"
       }))
     },
-    liquidaciones: {
-      title: 'Liquidaciones',
+    honorarios: {
+      title: 'Honorarios y facturación',
+      subtitle: 'Registro de horas trabajadas, liquidación de honorarios y facturación electrónica AFIP — todo desde el expediente.',
+      features: ['Time tracking por expediente y tarea', 'Liquidación automática de honorarios', 'Facturación electrónica con CAE (AFIP)', 'Dashboard de ingresos por área y abogado', 'Cuentas por cobrar y recordatorios de pago'],
       icon: /*#__PURE__*/React.createElement("svg", {
-        width: "28",
-        height: "28",
+        width: "32",
+        height: "32",
         viewBox: "0 0 24 24",
         fill: "none",
         stroke: "currentColor",
@@ -1211,11 +2052,76 @@ function App() {
         d: "M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
       }))
     },
+    'portal-cliente': {
+      title: 'Portal del cliente',
+      subtitle: 'Acceso seguro para que los clientes consulten el estado de sus causas, descarguen documentos y firmen electrónicamente.',
+      features: ['Vista de estado de expedientes en tiempo real', 'Descarga de documentos autorizados', 'Firma electrónica de escritos y contratos', 'Notificaciones automáticas por email y WhatsApp', 'Chat directo cliente ↔ estudio'],
+      icon: /*#__PURE__*/React.createElement("svg", {
+        width: "32",
+        height: "32",
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: "1.5"
+      }, /*#__PURE__*/React.createElement("path", {
+        d: "M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+      }), /*#__PURE__*/React.createElement("circle", {
+        cx: "12",
+        cy: "7",
+        r: "4"
+      }))
+    },
+    documents: {
+      title: 'Documentos',
+      subtitle: 'Repositorio centralizado de escritos, contratos y pruebas con búsqueda full-text y versionado.',
+      features: ['Repositorio por expediente con versiones', 'Búsqueda full-text en todos los documentos', 'Editor de escritos con variables dinámicas', 'Firma electrónica integrada'],
+      icon: /*#__PURE__*/React.createElement("svg", {
+        width: "32",
+        height: "32",
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: "1.5"
+      }, /*#__PURE__*/React.createElement("path", {
+        d: "M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"
+      }))
+    },
+    liquidaciones: {
+      title: 'Liquidaciones',
+      subtitle: 'Cálculo automático de rubros: intereses, actualizaciones indexadas y capital.',
+      features: ['Cálculo de intereses (tasas BNA / CER / UVA)', 'Actualización por índices INDEC', 'Exportación a PDF y Word', 'Historial de liquidaciones por expediente'],
+      icon: /*#__PURE__*/React.createElement("svg", {
+        width: "32",
+        height: "32",
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: "1.5"
+      }, /*#__PURE__*/React.createElement("rect", {
+        x: "2",
+        y: "3",
+        width: "20",
+        height: "14",
+        rx: "2"
+      }), /*#__PURE__*/React.createElement("line", {
+        x1: "8",
+        y1: "21",
+        x2: "16",
+        y2: "21"
+      }), /*#__PURE__*/React.createElement("line", {
+        x1: "12",
+        y1: "17",
+        x2: "12",
+        y2: "21"
+      }))
+    },
     reportes: {
       title: 'Reportes',
+      subtitle: 'Métricas de gestión: causas activas, tiempos de resolución, performance por abogado.',
+      features: ['Dashboard de KPIs por área de práctica', 'Reporte de cartera por estado y cliente', 'Métricas de tiempo promedio de resolución', 'Exportación Excel / PDF'],
       icon: /*#__PURE__*/React.createElement("svg", {
-        width: "28",
-        height: "28",
+        width: "32",
+        height: "32",
         viewBox: "0 0 24 24",
         fill: "none",
         stroke: "currentColor",
@@ -1238,10 +2144,12 @@ function App() {
       }))
     },
     facturacion: {
-      title: 'Facturación',
+      title: 'Facturación electrónica',
+      subtitle: 'Emisión de comprobantes electrónicos con CAE directo desde la plataforma (AFIP).',
+      features: ['Emisión de facturas A, B y C con CAE', 'Integración directa con AFIP (webservice)', 'Vinculación automática con honorarios', 'Historial de comprobantes por cliente'],
       icon: /*#__PURE__*/React.createElement("svg", {
-        width: "28",
-        height: "28",
+        width: "32",
+        height: "32",
         viewBox: "0 0 24 24",
         fill: "none",
         stroke: "currentColor",
@@ -1253,10 +2161,12 @@ function App() {
       }))
     },
     users: {
-      title: 'Usuarios',
+      title: 'Usuarios y permisos',
+      subtitle: 'Gestión de accesos por rol: socio, asociado, pasante, administrativo y cliente.',
+      features: ['5 niveles de permisos configurables', 'Acceso por expediente o por área', 'Log de auditoría de acciones', 'Multi-estudio (tenancy)'],
       icon: /*#__PURE__*/React.createElement("svg", {
-        width: "28",
-        height: "28",
+        width: "32",
+        height: "32",
         viewBox: "0 0 24 24",
         fill: "none",
         stroke: "currentColor",
@@ -1275,9 +2185,11 @@ function App() {
     },
     settings: {
       title: 'Configuración',
+      subtitle: null,
+      features: [],
       icon: /*#__PURE__*/React.createElement("svg", {
-        width: "28",
-        height: "28",
+        width: "32",
+        height: "32",
         viewBox: "0 0 24 24",
         fill: "none",
         stroke: "currentColor",
@@ -1314,10 +2226,9 @@ function App() {
   }), view === 'case-detail' && /*#__PURE__*/React.createElement(CaseDetail, {
     caseId: selectedCase || 'LFD-2024-0091',
     onBack: handleBack
-  }), placeholders[view] && /*#__PURE__*/React.createElement(PlaceholderView, {
-    title: placeholders[view].title,
-    icon: placeholders[view].icon
-  })));
+  }), view === 'agenda' && /*#__PURE__*/React.createElement(Agenda, {
+    onNavigate: handleNavigate
+  }), view === 'jurisprudencia' && /*#__PURE__*/React.createElement(Jurisprudencia, null), placeholders[view] && /*#__PURE__*/React.createElement(PlaceholderView, placeholders[view])));
 }
 ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));
 })(); } catch (e) { __ds_ns.__errors.push({ path: "ui_kits/app/App.jsx", error: String((e && e.message) || e) }); }
@@ -2884,14 +3795,14 @@ function Dashboard({
       fontWeight: 600,
       color: 'var(--fg-default)'
     }
-  }, "Dashboard"), /*#__PURE__*/React.createElement("p", {
+  }, "Inicio"), /*#__PURE__*/React.createElement("p", {
     style: {
       margin: 0,
       fontSize: '12px',
       color: 'var(--fg-muted)',
       fontFamily: 'var(--font-sans)'
     }
-  }, "Thursday, June 19, 2026 \xB7 ", stats.hearingsThisMonth, " hearings this month")), /*#__PURE__*/React.createElement("div", {
+  }, "Jueves, 19 de junio de 2026 \xB7 ", stats.hearingsThisMonth, " audiencias este mes")), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'flex',
       gap: '8px',
@@ -2929,7 +3840,42 @@ function Dashboard({
       flexDirection: 'column',
       gap: '20px'
     }
-  }, /*#__PURE__*/React.createElement("div", {
+  }, window.LFDData.movimientos && window.LFDData.movimientos.filter(m => !m.read).length > 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: 'var(--color-navy-900)',
+      borderRadius: '8px',
+      padding: '12px 18px',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '12px'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      width: '8px',
+      height: '8px',
+      borderRadius: '50%',
+      background: 'var(--color-teal-400)',
+      flexShrink: 0
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      flex: 1,
+      fontSize: '13px',
+      color: 'white',
+      fontFamily: 'var(--font-sans)',
+      fontWeight: 500
+    }
+  }, /*#__PURE__*/React.createElement("strong", {
+    style: {
+      color: 'var(--color-teal-300)'
+    }
+  }, window.LFDData.movimientos.filter(m => !m.read).length, " movimientos nuevos"), " en tus expedientes \u2014 PJN sincronizado hace 4 min"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: '11px',
+      color: 'rgba(255,255,255,0.45)',
+      fontFamily: 'var(--font-sans)'
+    }
+  }, "PJN \xB7 MEV \xB7 CABA \u2713")), /*#__PURE__*/React.createElement("div", {
     style: {
       display: 'grid',
       gridTemplateColumns: 'repeat(4, 1fr)',
@@ -2938,7 +3884,7 @@ function Dashboard({
   }, /*#__PURE__*/React.createElement(StatCard, {
     label: "Total Expedientes",
     value: stats.totalCases,
-    sub: `+${stats.newThisWeek} this week`,
+    sub: `+${stats.newThisWeek} esta semana`,
     color: "var(--color-navy-600)",
     icon: /*#__PURE__*/React.createElement("svg", {
       width: "18",
@@ -2953,9 +3899,9 @@ function Dashboard({
       points: "14,2 14,8 20,8"
     }))
   }), /*#__PURE__*/React.createElement(StatCard, {
-    label: "Active Matters",
+    label: "Causas activas",
     value: stats.activeCases,
-    sub: "74.5% of total",
+    sub: "74,5% del total",
     color: "var(--color-teal-600)",
     icon: /*#__PURE__*/React.createElement("svg", {
       width: "18",
@@ -2968,9 +3914,9 @@ function Dashboard({
       points: "22 12 18 12 15 21 9 3 6 12 2 12"
     }))
   }), /*#__PURE__*/React.createElement(StatCard, {
-    label: "Urgent",
+    label: "Urgentes",
     value: stats.urgentCases,
-    sub: "Require immediate action",
+    sub: "Requieren atenci\xF3n inmediata",
     color: "var(--color-danger-500)",
     icon: /*#__PURE__*/React.createElement("svg", {
       width: "18",
@@ -2993,9 +3939,9 @@ function Dashboard({
       y2: "17"
     }))
   }), /*#__PURE__*/React.createElement(StatCard, {
-    label: "Pending Signatures",
+    label: "Firmas pendientes",
     value: stats.pendingSignatures,
-    sub: "Documents awaiting sign",
+    sub: "Documentos por firmar",
     color: "var(--color-gold-500)",
     icon: /*#__PURE__*/React.createElement("svg", {
       width: "18",
@@ -3040,7 +3986,7 @@ function Dashboard({
       color: 'var(--fg-default)',
       fontFamily: 'var(--font-sans)'
     }
-  }, "Recent Expedientes"), /*#__PURE__*/React.createElement("button", {
+  }, "Expedientes recientes"), /*#__PURE__*/React.createElement("button", {
     onClick: () => onNavigate('cases'),
     style: {
       fontSize: '12px',
@@ -3051,7 +3997,7 @@ function Dashboard({
       border: 'none',
       cursor: 'pointer'
     }
-  }, "View all \u2192")), /*#__PURE__*/React.createElement("table", {
+  }, "Ver todas \u2192")), /*#__PURE__*/React.createElement("table", {
     style: {
       width: '100%',
       borderCollapse: 'collapse'
@@ -3060,7 +4006,7 @@ function Dashboard({
     style: {
       background: 'var(--bg-subtle)'
     }
-  }, ['Case No.', 'Caption', 'Type', 'Status', 'Assigned'].map(h => /*#__PURE__*/React.createElement("th", {
+  }, ['Expte.', 'Carátula', 'Tipo', 'Estado', 'Asignado'].map(h => /*#__PURE__*/React.createElement("th", {
     key: h,
     style: {
       padding: '8px 14px',
@@ -3212,7 +4158,7 @@ function Dashboard({
       color: 'var(--fg-default)',
       fontFamily: 'var(--font-sans)'
     }
-  }, "Today"), /*#__PURE__*/React.createElement("button", {
+  }, "Movimientos"), /*#__PURE__*/React.createElement("button", {
     onClick: () => onNavigate('agenda'),
     style: {
       fontSize: '12px',
@@ -3223,70 +4169,89 @@ function Dashboard({
       border: 'none',
       cursor: 'pointer'
     }
-  }, "Full calendar \u2192")), /*#__PURE__*/React.createElement("div", {
+  }, "Ver agenda \u2192")), /*#__PURE__*/React.createElement("div", {
     style: {
       flex: 1,
       overflowY: 'auto'
     }
-  }, todayEvents.map((ev, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
+  }, window.LFDData.movimientos.map((mv, i) => /*#__PURE__*/React.createElement("div", {
+    key: mv.id,
     style: {
-      padding: '12px 18px',
-      borderBottom: i < todayEvents.length - 1 ? '1px solid var(--border-muted)' : 'none',
+      padding: '10px 18px',
+      borderBottom: i < window.LFDData.movimientos.length - 1 ? '1px solid var(--border-muted)' : 'none',
       display: 'flex',
-      gap: '12px',
-      alignItems: 'flex-start'
+      gap: '10px',
+      alignItems: 'flex-start',
+      background: mv.read ? 'transparent' : 'var(--color-teal-50)'
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      textAlign: 'right',
+      width: '7px',
+      height: '7px',
+      borderRadius: '50%',
+      marginTop: '5px',
       flexShrink: 0,
-      minWidth: '38px'
+      background: mv.read ? 'var(--color-gray-200)' : mv.type === 'deadline' ? 'var(--color-danger-400)' : 'var(--color-teal-400)'
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      minWidth: 0
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      fontSize: '13px',
-      fontWeight: 700,
-      color: 'var(--fg-default)',
-      fontFamily: 'var(--font-mono)'
+      display: 'flex',
+      justifyContent: 'space-between',
+      gap: '8px'
     }
-  }, ev.time)), /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: '3px',
-      alignSelf: 'stretch',
-      borderRadius: '2px',
-      background: eventTypeStyle[ev.type] || '#9399a6',
-      flexShrink: 0,
-      marginTop: '3px'
-    }
-  }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("span", {
     style: {
       fontSize: '12px',
       fontWeight: 600,
       color: 'var(--fg-default)',
-      fontFamily: 'var(--font-sans)',
-      lineHeight: 1.4
+      fontFamily: 'var(--font-sans)'
     }
-  }, ev.title), ev.court && /*#__PURE__*/React.createElement("div", {
+  }, mv.action), /*#__PURE__*/React.createElement("span", {
     style: {
       fontSize: '10px',
+      color: 'var(--fg-subtle)',
+      fontFamily: 'var(--font-mono)',
+      whiteSpace: 'nowrap'
+    }
+  }, mv.time)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: '11px',
       color: 'var(--fg-muted)',
       fontFamily: 'var(--font-sans)',
-      marginTop: '2px'
+      marginTop: '1px',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap'
     }
-  }, ev.court), /*#__PURE__*/React.createElement("span", {
+  }, mv.detail), /*#__PURE__*/React.createElement("div", {
     style: {
+      display: 'flex',
+      gap: '6px',
+      marginTop: '3px',
+      alignItems: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontFamily: 'var(--font-mono)',
       fontSize: '10px',
-      fontWeight: 600,
-      color: eventTypeStyle[ev.type],
-      background: `${eventTypeStyle[ev.type]}18`,
+      color: 'var(--color-teal-700)'
+    }
+  }, mv.caseId), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: '9px',
+      fontWeight: 700,
       padding: '1px 5px',
       borderRadius: '3px',
-      fontFamily: 'var(--font-sans)',
-      marginTop: '4px',
-      display: 'inline-block'
+      background: mv.source === 'PJN' ? 'var(--color-navy-100)' : 'var(--color-gray-100)',
+      color: mv.source === 'PJN' ? 'var(--color-navy-700)' : 'var(--fg-muted)',
+      fontFamily: 'var(--font-mono)'
     }
-  }, eventTypeLabel[ev.type]))))), /*#__PURE__*/React.createElement("div", {
+  }, mv.source)))))), /*#__PURE__*/React.createElement("div", {
     style: {
       padding: '12px 18px',
       borderTop: '1px solid var(--border-muted)',
@@ -3302,7 +4267,7 @@ function Dashboard({
       textTransform: 'uppercase',
       letterSpacing: '0.07em'
     }
-  }, "Upcoming"), upcomingEvents.slice(0, 3).map((ev, i) => /*#__PURE__*/React.createElement("div", {
+  }, "Pr\xF3ximos vencimientos"), window.LFDData.vencimientos.filter(v => !v.done && v.date >= '2026-06-19').slice(0, 3).map((v, i) => /*#__PURE__*/React.createElement("div", {
     key: i,
     style: {
       display: 'flex',
@@ -3321,20 +4286,624 @@ function Dashboard({
       whiteSpace: 'nowrap',
       marginRight: '8px'
     }
-  }, ev.title), /*#__PURE__*/React.createElement("span", {
+  }, v.title), /*#__PURE__*/React.createElement("span", {
     style: {
       fontSize: '10px',
       fontWeight: 600,
-      color: ev.priority === 'high' ? 'var(--color-danger-600)' : 'var(--fg-muted)',
+      color: v.priority === 'high' ? 'var(--color-danger-600)' : 'var(--fg-muted)',
       whiteSpace: 'nowrap',
       fontFamily: 'var(--font-sans)'
     }
-  }, ev.date))))))));
+  }, v.date.slice(8), " ", ['', '', '', '', '', '', 'jun', 'jul', 'ago'][parseInt(v.date.slice(5, 7))]))))))));
 }
 Object.assign(window, {
   Dashboard
 });
 })(); } catch (e) { __ds_ns.__errors.push({ path: "ui_kits/app/Dashboard.jsx", error: String((e && e.message) || e) }); }
+
+// ui_kits/app/Jurisprudencia.jsx
+try { (() => {
+// Legal Flow Doctor — Buscador de Jurisprudencia con IA
+// Exports: Jurisprudencia
+
+const SAMPLE_RESULTS = [{
+  id: 'j1',
+  title: 'García c/ Municipalidad de Buenos Aires s/ Daños y Perjuicios',
+  court: 'Cámara Nacional de Apelaciones en lo Civil, Sala B',
+  date: '2024-09-12',
+  excerpt: 'La responsabilidad del Estado por los daños causados por el deficiente estado de la vía pública debe ser analizada conforme los arts. 1757 y 1758 del Código Civil y Comercial. La falta de señalización adecuada constituye factor de atribución objetivo.',
+  relevance: 97,
+  source: 'PJN',
+  cites: 12,
+  topics: ['Daños y perjuicios', 'Responsabilidad del Estado', 'Vía pública']
+}, {
+  id: 'j2',
+  title: 'Municipalidad de CABA c/ Empresa Constructora s/ Ejecución',
+  court: 'Juzgado Contencioso Administrativo Federal N° 3',
+  date: '2024-07-03',
+  excerpt: 'En materia de contratos administrativos, la Municipalidad goza de prerrogativas exorbitantes que le permiten modificar unilateralmente el contrato ante razones de interés público debidamente fundadas, conforme doctrina de la CSJN.',
+  relevance: 84,
+  source: 'CSJN',
+  cites: 8,
+  topics: ['Contratos administrativos', 'Prerrogativas', 'CABA']
+}, {
+  id: 'j3',
+  title: 'López y otros c/ Municipalidad s/ Amparo colectivo',
+  court: 'Cámara Federal de Apelaciones de La Plata',
+  date: '2023-11-28',
+  excerpt: 'El amparo colectivo resulta procedente cuando la afectación incide sobre una pluralidad de personas determinables, aunque no sean parte del proceso. El acceso a la información pública municipal no puede ser restringido sin causa fundada.',
+  relevance: 79,
+  source: 'PJN',
+  cites: 21,
+  topics: ['Amparo', 'Acción colectiva', 'Información pública']
+}, {
+  id: 'j4',
+  title: 'Rodríguez c/ Municipalidad de Lanús s/ Responsabilidad extracontractual',
+  court: 'Suprema Corte de Justicia de Buenos Aires',
+  date: '2023-08-15',
+  excerpt: 'La omisión de mantenimiento de instalaciones públicas configura falta de servicio en los términos del art. 1112 del Código Civil (actual art. 1764 CCyCN), generando responsabilidad directa del Estado municipal.',
+  relevance: 76,
+  source: 'SCBA',
+  cites: 5,
+  topics: ['Falta de servicio', 'Estado municipal', 'Responsabilidad extracontractual']
+}];
+function Jurisprudencia() {
+  const [query, setQuery] = React.useState('');
+  const [submitted, setSubmitted] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [results, setResults] = React.useState([]);
+  const [activeResult, setActiveResult] = React.useState(null);
+  const SUGGESTIONS = ['Responsabilidad del Estado por vía pública deficiente', 'Despido sin causa — cálculo de indemnización', 'Nulidad de acto administrativo por vicios de forma', 'Prescripción en contratos comerciales — plazo'];
+  const handleSearch = q => {
+    const text = q || query;
+    if (!text.trim()) return;
+    setQuery(text);
+    setLoading(true);
+    setSubmitted(true);
+    setResults([]);
+    setTimeout(() => {
+      setLoading(false);
+      setResults(SAMPLE_RESULTS);
+    }, 1400);
+  };
+  const sourceColors = {
+    PJN: '#244876',
+    CSJN: '#8b5e18',
+    SCBA: '#106b61'
+  };
+  const sourceBg = {
+    PJN: '#dfe8f2',
+    CSJN: '#faf0d8',
+    SCBA: '#d0f4f0'
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'hidden',
+      background: 'var(--bg-subtle)'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: 'white',
+      borderBottom: '1px solid var(--border-muted)',
+      padding: '14px 28px'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", {
+    style: {
+      margin: 0,
+      fontSize: '18px',
+      fontFamily: 'var(--font-serif)',
+      fontWeight: 600,
+      color: 'var(--fg-default)'
+    }
+  }, "Buscador de Jurisprudencia"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      margin: 0,
+      fontSize: '12px',
+      color: 'var(--fg-muted)',
+      fontFamily: 'var(--font-sans)'
+    }
+  }, "+500.000 fuentes judiciales argentinas indexadas con IA \xB7 PJN \xB7 CSJN \xB7 SCBA \xB7 C\xE1maras provinciales")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '6px',
+      padding: '4px 10px',
+      borderRadius: '999px',
+      background: 'var(--color-teal-50)',
+      border: '1px solid var(--color-teal-200)'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      width: '7px',
+      height: '7px',
+      borderRadius: '50%',
+      background: 'var(--color-teal-500)'
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: '11px',
+      fontWeight: 600,
+      color: 'var(--color-teal-700)',
+      fontFamily: 'var(--font-sans)'
+    }
+  }, "IA activa")))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      overflowY: 'auto'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: submitted ? 'var(--bg-subtle)' : 'var(--color-navy-900)',
+      padding: submitted ? '16px 28px' : '48px 28px',
+      transition: 'all 400ms'
+    }
+  }, !submitted && /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: 'center',
+      marginBottom: '24px'
+    }
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      margin: 0,
+      fontSize: '13px',
+      color: 'rgba(255,255,255,0.5)',
+      fontFamily: 'var(--font-sans)'
+    }
+  }, "Describ\xED tu caso en lenguaje natural \u2014 la IA encuentra los precedentes m\xE1s relevantes")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      maxWidth: '720px',
+      margin: '0 auto'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: '8px'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      display: 'flex',
+      alignItems: 'center',
+      gap: '10px',
+      background: submitted ? 'white' : 'rgba(255,255,255,0.10)',
+      border: '1.5px solid ' + (submitted ? 'var(--border-strong)' : 'rgba(255,255,255,0.2)'),
+      borderRadius: '8px',
+      padding: '10px 16px',
+      transition: 'all 300ms'
+    }
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "16",
+    height: "16",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: submitted ? 'var(--fg-muted)' : 'rgba(255,255,255,0.5)',
+    strokeWidth: "2"
+  }, /*#__PURE__*/React.createElement("circle", {
+    cx: "11",
+    cy: "11",
+    r: "8"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "m21 21-4.35-4.35"
+  })), /*#__PURE__*/React.createElement("input", {
+    value: query,
+    onChange: e => setQuery(e.target.value),
+    onKeyDown: e => e.key === 'Enter' && handleSearch(),
+    placeholder: "Ej: responsabilidad del Estado por da\xF1o en v\xEDa p\xFAblica CABA",
+    style: {
+      flex: 1,
+      border: 'none',
+      background: 'transparent',
+      outline: 'none',
+      fontSize: '14px',
+      fontFamily: 'var(--font-sans)',
+      color: submitted ? 'var(--fg-default)' : 'white'
+    }
+  }), query && /*#__PURE__*/React.createElement("button", {
+    onClick: () => {
+      setQuery('');
+      setSubmitted(false);
+      setResults([]);
+    },
+    style: {
+      background: 'none',
+      border: 'none',
+      cursor: 'pointer',
+      color: submitted ? 'var(--fg-subtle)' : 'rgba(255,255,255,0.4)',
+      fontSize: '16px',
+      lineHeight: 1
+    }
+  }, "\xD7")), /*#__PURE__*/React.createElement("button", {
+    onClick: () => handleSearch(),
+    style: {
+      padding: '10px 20px',
+      borderRadius: '8px',
+      border: 'none',
+      background: 'var(--color-teal-600)',
+      color: 'white',
+      fontSize: '13px',
+      fontWeight: 600,
+      fontFamily: 'var(--font-sans)',
+      cursor: 'pointer',
+      whiteSpace: 'nowrap'
+    }
+  }, "Buscar con IA")), !submitted && /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: '8px',
+      marginTop: '16px',
+      justifyContent: 'center'
+    }
+  }, SUGGESTIONS.map((s, i) => /*#__PURE__*/React.createElement("button", {
+    key: i,
+    onClick: () => handleSearch(s),
+    style: {
+      padding: '5px 13px',
+      borderRadius: '999px',
+      border: '1px solid rgba(255,255,255,0.2)',
+      background: 'rgba(255,255,255,0.07)',
+      color: 'rgba(255,255,255,0.65)',
+      fontSize: '12px',
+      fontFamily: 'var(--font-sans)',
+      cursor: 'pointer'
+    }
+  }, s))))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: '20px 28px',
+      display: 'flex',
+      gap: '16px'
+    }
+  }, loading && /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '16px',
+      padding: '60px 0'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: '40px',
+      height: '40px',
+      borderRadius: '50%',
+      border: '3px solid var(--color-teal-100)',
+      borderTopColor: 'var(--color-teal-500)',
+      animation: 'lfd-spin 0.8s linear infinite'
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: '14px',
+      fontWeight: 600,
+      color: 'var(--fg-default)',
+      fontFamily: 'var(--font-sans)',
+      marginBottom: '6px'
+    }
+  }, "Analizando jurisprudencia\u2026"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: '12px',
+      color: 'var(--fg-muted)',
+      fontFamily: 'var(--font-sans)'
+    }
+  }, "Consultando +500.000 fuentes \xB7 PJN \xB7 CSJN \xB7 C\xE1maras"))), !loading && results.length > 0 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '10px'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: '4px'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: '12px',
+      color: 'var(--fg-muted)',
+      fontFamily: 'var(--font-sans)'
+    }
+  }, results.length, " resultados m\xE1s relevantes para: ", /*#__PURE__*/React.createElement("strong", {
+    style: {
+      color: 'var(--fg-default)'
+    }
+  }, "\"", query, "\"")), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: '11px',
+      color: 'var(--color-teal-700)',
+      fontFamily: 'var(--font-sans)',
+      fontWeight: 600
+    }
+  }, "Ordenar por: Relevancia \u2193")), results.map(r => /*#__PURE__*/React.createElement("div", {
+    key: r.id,
+    onClick: () => setActiveResult(activeResult?.id === r.id ? null : r),
+    style: {
+      background: 'white',
+      border: '1px solid ' + (activeResult?.id === r.id ? 'var(--color-teal-400)' : 'var(--border-default)'),
+      borderRadius: '8px',
+      padding: '16px 18px',
+      cursor: 'pointer',
+      boxShadow: activeResult?.id === r.id ? 'var(--shadow-md)' : 'var(--shadow-sm)',
+      transition: 'all 200ms'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start',
+      gap: '12px',
+      marginBottom: '8px'
+    }
+  }, /*#__PURE__*/React.createElement("h3", {
+    style: {
+      margin: 0,
+      fontSize: '14px',
+      fontFamily: 'var(--font-serif)',
+      fontWeight: 600,
+      color: 'var(--fg-default)',
+      lineHeight: 1.4,
+      flex: 1
+    }
+  }, r.title), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '6px',
+      flexShrink: 0
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: '11px',
+      fontWeight: 700,
+      color: r.relevance >= 90 ? 'var(--color-teal-700)' : r.relevance >= 75 ? 'var(--color-navy-700)' : 'var(--fg-muted)',
+      fontFamily: 'var(--font-sans)',
+      background: r.relevance >= 90 ? 'var(--color-teal-50)' : r.relevance >= 75 ? 'var(--color-navy-50)' : 'var(--bg-subtle)',
+      padding: '2px 8px',
+      borderRadius: '999px',
+      border: '1px solid ' + (r.relevance >= 90 ? 'var(--color-teal-200)' : r.relevance >= 75 ? 'var(--color-navy-100)' : 'var(--border-muted)')
+    }
+  }, r.relevance, "% relevante"))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: '8px',
+      flexWrap: 'wrap',
+      marginBottom: '8px'
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: '11px',
+      padding: '2px 8px',
+      borderRadius: '4px',
+      background: sourceBg[r.source] || 'var(--bg-subtle)',
+      color: sourceColors[r.source] || 'var(--fg-muted)',
+      fontFamily: 'var(--font-mono)',
+      fontWeight: 600
+    }
+  }, r.source), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: '11px',
+      color: 'var(--fg-muted)',
+      fontFamily: 'var(--font-sans)'
+    }
+  }, r.court), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: '11px',
+      color: 'var(--fg-subtle)',
+      fontFamily: 'var(--font-sans)'
+    }
+  }, "\xB7 ", r.date), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: '11px',
+      color: 'var(--fg-subtle)',
+      fontFamily: 'var(--font-sans)'
+    }
+  }, "\xB7 ", r.cites, " citas")), /*#__PURE__*/React.createElement("p", {
+    style: {
+      margin: 0,
+      fontSize: '13px',
+      color: 'var(--fg-muted)',
+      fontFamily: 'var(--font-sans)',
+      lineHeight: 1.6
+    }
+  }, r.excerpt), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      gap: '6px',
+      flexWrap: 'wrap',
+      marginTop: '10px'
+    }
+  }, r.topics.map(t => /*#__PURE__*/React.createElement("span", {
+    key: t,
+    style: {
+      fontSize: '11px',
+      padding: '2px 8px',
+      borderRadius: '4px',
+      background: 'var(--color-navy-50)',
+      color: 'var(--color-navy-700)',
+      fontFamily: 'var(--font-sans)',
+      border: '1px solid var(--color-navy-100)'
+    }
+  }, t))), activeResult?.id === r.id && /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: '14px',
+      paddingTop: '14px',
+      borderTop: '1px solid var(--border-muted)',
+      display: 'flex',
+      gap: '8px'
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    style: {
+      padding: '6px 14px',
+      borderRadius: '5px',
+      border: 'none',
+      background: 'var(--color-teal-600)',
+      color: 'white',
+      fontSize: '12px',
+      fontFamily: 'var(--font-sans)',
+      fontWeight: 600,
+      cursor: 'pointer'
+    }
+  }, "Ver fallo completo"), /*#__PURE__*/React.createElement("button", {
+    style: {
+      padding: '6px 14px',
+      borderRadius: '5px',
+      border: '1px solid var(--border-strong)',
+      background: 'white',
+      color: 'var(--fg-default)',
+      fontSize: '12px',
+      fontFamily: 'var(--font-sans)',
+      fontWeight: 600,
+      cursor: 'pointer'
+    }
+  }, "Citar en escrito"), /*#__PURE__*/React.createElement("button", {
+    style: {
+      padding: '6px 14px',
+      borderRadius: '5px',
+      border: '1px solid var(--border-strong)',
+      background: 'white',
+      color: 'var(--fg-default)',
+      fontSize: '12px',
+      fontFamily: 'var(--font-sans)',
+      fontWeight: 600,
+      cursor: 'pointer'
+    }
+  }, "Guardar"))))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: '220px',
+      flexShrink: 0,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '12px'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: 'white',
+      border: '1px solid var(--border-default)',
+      borderRadius: '8px',
+      padding: '14px',
+      boxShadow: 'var(--shadow-sm)'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: '11px',
+      fontWeight: 700,
+      color: 'var(--fg-muted)',
+      fontFamily: 'var(--font-sans)',
+      textTransform: 'uppercase',
+      letterSpacing: '0.07em',
+      marginBottom: '10px'
+    }
+  }, "Filtrar por fuente"), [['PJN', 'Poder Judicial Nación', 892], ['CSJN', 'Corte Suprema', 124], ['SCBA', 'Sup. Corte Bs As', 341], ['Cámaras', 'Cámaras Nac.', 2100]].map(([code, label, count]) => /*#__PURE__*/React.createElement("label", {
+    key: code,
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+      padding: '5px 0',
+      cursor: 'pointer',
+      borderBottom: '1px solid var(--border-muted)'
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "checkbox",
+    defaultChecked: true,
+    style: {
+      accentColor: 'var(--color-teal-600)'
+    }
+  }), /*#__PURE__*/React.createElement("span", {
+    style: {
+      flex: 1,
+      fontSize: '12px',
+      color: 'var(--fg-default)',
+      fontFamily: 'var(--font-sans)'
+    }
+  }, label), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: '10px',
+      color: 'var(--fg-subtle)',
+      fontFamily: 'var(--font-mono)'
+    }
+  }, count)))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: 'var(--color-teal-50)',
+      border: '1px solid var(--color-teal-200)',
+      borderRadius: '8px',
+      padding: '14px'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: '11px',
+      fontWeight: 700,
+      color: 'var(--color-teal-800)',
+      fontFamily: 'var(--font-sans)',
+      marginBottom: '8px'
+    }
+  }, "\uD83D\uDCA1 Consejo IA"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      margin: 0,
+      fontSize: '12px',
+      color: 'var(--color-teal-900)',
+      fontFamily: 'var(--font-sans)',
+      lineHeight: 1.5
+    }
+  }, "Agreg\xE1 la jurisdicci\xF3n y el fuero para resultados m\xE1s precisos. Ej: ", /*#__PURE__*/React.createElement("em", null, "\"da\xF1os CABA fuero civil 2023-2024\""))))), !loading && !submitted && /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '12px',
+      padding: '40px 0'
+    }
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "48",
+    height: "48",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "var(--color-gray-300)",
+    strokeWidth: "1.2"
+  }, /*#__PURE__*/React.createElement("circle", {
+    cx: "11",
+    cy: "11",
+    r: "8"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "m21 21-4.35-4.35"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M11 8v3"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "11",
+    cy: "14",
+    r: "0.5",
+    fill: "var(--color-gray-300)"
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: '14px',
+      color: 'var(--fg-subtle)',
+      fontFamily: 'var(--font-sans)',
+      textAlign: 'center'
+    }
+  }, "Ingres\xE1 una consulta para buscar jurisprudencia con IA")))));
+}
+Object.assign(window, {
+  Jurisprudencia
+});
+})(); } catch (e) { __ds_ns.__errors.push({ path: "ui_kits/app/Jurisprudencia.jsx", error: String((e && e.message) || e) }); }
 
 // ui_kits/app/Sidebar.jsx
 try { (() => {
@@ -3494,6 +5063,86 @@ const NAV_ITEMS = [{
     y1: "20",
     x2: "6",
     y2: "14"
+  }))
+}, {
+  id: 'pruebas',
+  label: 'Pruebas',
+  icon: /*#__PURE__*/React.createElement("svg", {
+    width: "18",
+    height: "18",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M9 11l3 3L22 4"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "3",
+    y: "11",
+    width: "8",
+    height: "8",
+    rx: "1"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M3 7l4-4 4 4"
+  }))
+}, {
+  id: 'honorarios',
+  label: 'Honorarios',
+  icon: /*#__PURE__*/React.createElement("svg", {
+    width: "18",
+    height: "18",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8"
+  }, /*#__PURE__*/React.createElement("line", {
+    x1: "12",
+    y1: "1",
+    x2: "12",
+    y2: "23"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
+  }))
+}, {
+  id: 'portal-cliente',
+  label: 'Portal del cliente',
+  icon: /*#__PURE__*/React.createElement("svg", {
+    width: "18",
+    height: "18",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "12",
+    cy: "7",
+    r: "4"
+  }))
+}, {
+  id: 'jurisprudencia',
+  label: 'Jurisprudencia IA',
+  icon: /*#__PURE__*/React.createElement("svg", {
+    width: "18",
+    height: "18",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8"
+  }, /*#__PURE__*/React.createElement("circle", {
+    cx: "11",
+    cy: "11",
+    r: "8"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "m21 21-4.35-4.35"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M11 8v3"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "11",
+    cy: "14",
+    r: "0.8",
+    fill: "currentColor"
   }))
 }, {
   id: 'facturacion',
@@ -4062,6 +5711,184 @@ window.LFDData = {
     user: 'Roberto Pérez',
     type: 'doc'
   }],
+  pjnStatus: {
+    lastSync: 'hace 4 min',
+    status: 'online',
+    pendingAlerts: 3,
+    jurisdictions: ['PJN', 'MEV', 'PBA', 'CABA']
+  },
+  movimientos: [{
+    id: 'm1',
+    caseId: 'LFD-2024-0091',
+    caseTitle: 'García S.A. v. Municipalidad',
+    time: '08:42',
+    date: 'Hoy',
+    type: 'auto',
+    action: 'Nueva providencia',
+    detail: 'Se corre traslado del escrito de fs. 234/241 por el término de ley.',
+    source: 'PJN',
+    read: false
+  }, {
+    id: 'm2',
+    caseId: 'LFD-2024-0087',
+    caseTitle: 'Torres c/ Log. del Sur',
+    time: '07:15',
+    date: 'Hoy',
+    type: 'deadline',
+    action: 'Vencimiento hoy',
+    detail: 'Contestación de demanda vence a las 11:00 hs — Tribunal del Trabajo N° 5.',
+    source: 'sistema',
+    read: false
+  }, {
+    id: 'm3',
+    caseId: 'LFD-2024-0070',
+    caseTitle: 'Farmacéutica Austral c/ ANMAT',
+    time: '06:30',
+    date: 'Hoy',
+    type: 'auto',
+    action: 'Movimiento registrado',
+    detail: 'Agregado dictamen fiscal. Autos a despacho.',
+    source: 'PJN',
+    read: false
+  }, {
+    id: 'm4',
+    caseId: 'LFD-2024-0082',
+    caseTitle: 'Martínez v. Banco Nacional',
+    time: '18:22',
+    date: 'Ayer',
+    type: 'auto',
+    action: 'Sentencia parcial',
+    detail: 'Se dicta sentencia interlocutoria. Ver texto completo en PJN.',
+    source: 'PJN',
+    read: true
+  }, {
+    id: 'm5',
+    caseId: 'LFD-2024-0079',
+    caseTitle: 'Pampas v. Distribuidora Norte',
+    time: '15:10',
+    date: 'Ayer',
+    type: 'deadline',
+    action: 'Recordatorio automático',
+    detail: 'Escrito de apelación vence mañana. ¿Ya lo preparaste?',
+    source: 'sistema',
+    read: true
+  }],
+  vencimientos: [{
+    id: 'v1',
+    date: '2026-06-19',
+    caseId: 'LFD-2024-0087',
+    title: 'Contestación de demanda',
+    court: 'Tribunal del Trabajo N° 5',
+    priority: 'high',
+    semaforo: 'rojo',
+    done: false
+  }, {
+    id: 'v2',
+    date: '2026-06-20',
+    caseId: 'LFD-2024-0079',
+    title: 'Escrito de apelación',
+    court: 'Cámara Comercial Sala D',
+    priority: 'high',
+    semaforo: 'rojo',
+    done: false
+  }, {
+    id: 'v3',
+    date: '2026-06-22',
+    caseId: 'LFD-2024-0070',
+    title: 'Audiencia preliminar',
+    court: 'Cámara Federal CA',
+    priority: 'normal',
+    semaforo: 'rojo',
+    done: false,
+    type: 'hearing'
+  }, {
+    id: 'v4',
+    date: '2026-06-24',
+    caseId: 'LFD-2024-0075',
+    title: 'Declaración pericial',
+    court: 'Juzgado Civil N° 3',
+    priority: 'normal',
+    semaforo: 'amarillo',
+    done: false,
+    type: 'hearing'
+  }, {
+    id: 'v5',
+    date: '2026-06-26',
+    caseId: 'LFD-2024-0068',
+    title: 'Respuesta a AFIP resolución 4521',
+    court: 'Tribunal Fiscal',
+    priority: 'high',
+    semaforo: 'rojo',
+    done: false
+  }, {
+    id: 'v6',
+    date: '2026-06-28',
+    caseId: 'LFD-2024-0091',
+    title: 'Prueba pericial contable — presentación',
+    court: 'Juzgado Comercial N° 12',
+    priority: 'normal',
+    semaforo: 'amarillo',
+    done: false
+  }, {
+    id: 'v7',
+    date: '2026-07-03',
+    caseId: 'LFD-2024-0082',
+    title: 'Próxima audiencia — Juzgado Civil',
+    court: 'Juzgado Civil N° 7',
+    priority: 'normal',
+    semaforo: 'verde',
+    done: false,
+    type: 'hearing'
+  }, {
+    id: 'v8',
+    date: '2026-07-08',
+    caseId: 'LFD-2024-0049',
+    title: 'Vencimiento medida cautelar',
+    court: 'Juzgado Civil N° 9',
+    priority: 'high',
+    semaforo: 'rojo',
+    done: false
+  }, {
+    id: 'v9',
+    date: '2026-06-15',
+    caseId: 'LFD-2024-0055',
+    title: 'Presentación de alegatos',
+    court: 'Juzgado Comercial N° 8',
+    priority: 'normal',
+    semaforo: 'verde',
+    done: true
+  }, {
+    id: 'v10',
+    date: '2026-06-10',
+    caseId: 'LFD-2024-0061',
+    title: 'Firma acuerdo extrajudicial',
+    court: 'Juzgado Civil N° 15',
+    priority: 'normal',
+    semaforo: 'amarillo',
+    done: true
+  }],
+  honorarios: {
+    pendingTotal: 4820000,
+    billedThisMonth: 1250000,
+    collectedThisMonth: 890000,
+    byArea: [{
+      area: 'Comercial',
+      amount: 2100000,
+      pct: 44
+    }, {
+      area: 'Civil',
+      amount: 1200000,
+      pct: 25
+    }, {
+      area: 'Laboral',
+      amount: 900000,
+      pct: 19
+    }, {
+      area: 'Otro',
+      amount: 620000,
+      pct: 12
+    }]
+  },
   parties: [{
     role: 'Plaintiff',
     name: 'García Inversiones S.A.',

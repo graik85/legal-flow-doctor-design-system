@@ -224,6 +224,142 @@ See `components/core/core.card.html` in the Design System tab for a live, intera
 
 ---
 
+## INVESTIGACIÓN DE CAMPO — ENTREVISTA CON USUARIO DE LEX DOCTOR
+
+**Fecha:** 19 de junio de 2026 · **Entrevistado:** Hernan Bonardi (abogado, usuario activo de Lex Doctor)
+
+A continuación, los hallazgos clave de la conversación para informar el diseño de Legal Flow Doctor:
+
+### Módulo de Pruebas — el más crítico
+Hernan enfatizó que el módulo de **pruebas** es la sección más importante del sistema. Hay 4 tipos:
+- **Testimonial** — testigos con estado (ofrecida, admitida, notificada, producida)
+- **Confesional** — absolución de posiciones
+- **Informativa** — oficios a organismos (bancos, ANSES, AFIP, etc.)
+- **Pericial** — pericias médicas, contables, de ingeniería, etc.
+
+Cada prueba tiene un ciclo: `ofrecida → admitida → notificada → producida → confronte → contestación`. El sistema debe controlar el estado individual de cada una.
+
+**Implicación de diseño:** Agregar solapas de Pruebas en el detalle del expediente, con subtipo, estado del ciclo, y próxima acción requerida.
+
+### Sistema de Semáforo para tareas y vencimientos
+Lex Doctor usa un sistema de **semáforo de 3 colores** para diferenciar:
+- 🔴 **Rojo** — vencimiento procesal (plazo legal, no negociable)
+- 🟡 **Amarillo** — compromiso (tarea interna acordada)
+- 🟢 **Verde** — tarea (pendiente sin urgencia)
+
+**Implicación de diseño:** Incorporar este sistema de prioridad en la Agenda/Vencimientos. No es solo urgente/normal — son categorías conceptualmente distintas.
+
+### Alertas proactivas con 90 días de anticipación
+Para audiencias y vencimientos importantes, el sistema debe generar alertas con **90, 30, 15 y 7 días** de antelación. Hoy lo hacen manualmente; es una fuente frecuente de errores.
+
+### Punteo de expedientes
+"Puntear" un expediente es auditar manualmente el estado de cada prueba y oficio para determinar si la causa está lista para pasar a la siguiente etapa. Es una tarea recurrente en estudios de alto volumen.
+
+**Implicación de diseño:** Vista de checklist de expediente con estado de cada elemento (prueba, oficio, escrito) y un indicador de "listo para avanzar".
+
+### Generación automática de escritos con variables
+Lex Doctor permite generar escritos usando **variables precargadas** (nombre de las partes, carátula, número de expediente, domicilios, CUIT). Esto reduce errores y es especialmente útil para escritos masivos (estudios de ejecución de deuda).
+
+**Implicación de diseño:** Editor de escritos con campos variables autocompletados. Alta prioridad para estudios de alto volumen.
+
+### Problema de domicilios electrónicos
+Lex Doctor no tiene campo específico para **domicilio electrónico** de personas físicas. Hernan usa el campo "email" como workaround. Las compañías de seguros y bancos sí tienen domicilios electrónicos registrados en PBA.
+
+**Implicación de diseño:** Campo explícito `domicilio_electronico` en el formulario de partes, separado del email personal.
+
+### Flexibilidad de campos por tipo de proceso
+El sistema actual no permite personalizar campos según el tipo de causa (accidente laboral vs. tránsito vs. comercial). Hernan lleva un protocolo **manual** para recordar qué datos cargar en cada caso.
+
+**Implicación de diseño:** Formularios de carga dinámicos según `tipo_proceso` — campos obligatorios y opcionales configurables por tipo.
+
+### IA para pericias médicas
+Hernan usa IA externamente para: analizar pericias médicas, detectar inconsistencias con los hechos de la demanda, y redactar impugnaciones. Ve esto como diferencial competitivo enorme.
+
+**Implicación de diseño:** Módulo de análisis de pericias con IA (subir PDF → detectar inconsistencias → generar borrador de impugnación).
+
+### Restricciones del PJN para bots
+El Poder Judicial de la Nación **bloquea el uso de bots** para consulta de expedientes. Veredicta lo resuelve con scraping adaptativo. Requiere monitoreo constante de cambios en los portales.
+
+### Modelo de negocio de Lex Doctor (referencia)
+- Licencia madre (única) + costo por usuario + tarifa por acceso remoto
+- Almacenamiento vinculado a Google Drive
+- Sin cloud nativo — instalación local con acceso remoto opcional
+
+### Plan acordado con Hernan (próximas sesiones)
+5 sesiones de 20 minutos cada una:
+1. **Carga inicial de datos** — partes, domicilios, tipo de proceso
+2. **Configuración de hoja de ruta** — vencimientos, alertas, semáforo
+3. **Generación de demandas** — escritos automáticos con variables
+4. **Módulo de pruebas** — tipos, estados, punteo
+5. **Seguimiento automático** — integraciones PJN/MEV, notificaciones
+
+---
+
+## ANÁLISIS COMPETITIVO
+
+Research realizado sobre las principales plataformas del mercado legal SaaS para estudios jurídicos, con foco en Argentina y Latinoamérica.
+
+### Competidores clave
+
+| Plataforma | Origen | Foco principal | Precio orientativo |
+|------------|--------|----------------|--------------------|
+| **Veredicta** | Argentina | PJN sync + IA jurisprudencia + WhatsApp | Free + Pro ~USD 20/user/mes |
+| **Clio** | Global (CA) | Estándar industria, billing + casos | USD 40–125/user/mes |
+| **MyCase** | EEUU | Estudios pequeños, portal cliente | USD 49/user/mes |
+| **CaseTracking (Lemontech)** | Chile/LatAm | Seguimiento automático tribunales | Consultar |
+| **TimeBillingX** | Argentina | Registro horas, facturación | Consultar |
+
+### Features clave por plataforma
+
+**Veredicta** (competidor directo en AR):
+- Integración PJN/MEV: descarga automática de movimientos judiciales, funciona cuando el PJN está caído
+- WhatsApp Bot: notificaciones automáticas a clientes vía WhatsApp
+- IA Jurisprudencia: búsqueda en +500.000 fuentes (CSJN, PJN, Cámaras, SCBA)
+- Módulos: expedientes, agenda/vencimientos, honorarios, documentos, clientes
+- Planes: Free (1 usuario) + Pro (multi-usuario, multi-área, roles, circuitos de aprobación)
+
+**Clio** (referencia global):
+- Dashboard centralizado con métricas de causas, tiempo y facturación
+- Time tracking nativo + billing + facturación electrónica
+- Document management con versionado
+- Portal del cliente (read-only)
+- Mobile app nativa (iOS + Android)
+- Integraciones: Google/Outlook Calendar, Zoom, DocuSign
+
+**CaseTracking / Lemontech** (líder LatAm):
+- Monitoreo automático de 100+ portales judiciales en 8 países
+- Ahorro de ~55 hs/mes en seguimiento manual
+- Alertas automáticas por nuevos movimientos
+- Bitácora por expediente (comentarios, documentos, partes asignadas)
+- KPIs y reportes en Excel/PDF
+- Multi-jurisdicción: Argentina, Chile, Colombia, México, Perú, etc.
+
+### Gaps identificados y features agregados al design system
+
+| Feature | Inspiración | Estado |
+|---------|-------------|--------|
+| Agenda/Vencimientos calendar | Todos | ✅ Prototipado en `ui_kits/app/Agenda.jsx` |
+| PJN sync status + alert feed | Veredicta / CaseTracking | ✅ En Dashboard + sidebar |
+| Buscador de jurisprudencia IA | Veredicta | ✅ Prototipado en `ui_kits/app/Jurisprudencia.jsx` |
+| Feed de movimientos automáticos | CaseTracking | ✅ En Dashboard (reemplaza agenda estática) |
+| Estado PJN/MEV en tiempo real | Veredicta | ✅ En Agenda sidebar |
+| Time tracking / honorarios | Clio / TimeBillingX | 🔲 Pendiente |
+| Portal del cliente | Clio / MyCase | 🔲 Pendiente |
+| WhatsApp notification toggle | Veredicta | 🔲 Pendiente |
+| Facturación electrónica AFIP | Veredicta / TimeBillingX | 🔲 Pendiente |
+| Mobile / PWA | Clio | 🔲 Pendiente |
+
+### Posicionamiento sugerido para Legal Flow Doctor
+
+El mercado argentino tiene a Veredicta como referente directo (integración PJN + IA). Legal Flow Doctor puede diferenciarse en:
+1. **UX superior** — la mayoría de las herramientas argentinas tienen UI desactualizada
+2. **Multi-jurisdicción LatAm** — expandir más allá de Argentina (como CaseTracking)
+3. **IA generativa nativa** — no solo búsqueda, sino redacción asistida de escritos
+4. **Colaboración en tiempo real** — co-edición de documentos al estilo Notion
+5. **Portal del cliente moderno** — la mayoría son read-only; ofrecer firmado electrónico integrado
+
+---
+
 ## CAVEATS & OPEN QUESTIONS
 
 1. **No real brand assets provided.** Logo is a bespoke SVG created for this system. If the actual Legal Flow Doctor wordmark/logomark exists, replace `assets/logo*.svg`.
