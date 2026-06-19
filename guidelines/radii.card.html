@@ -1,0 +1,28 @@
+<!-- @dsCard group="Spacing" viewport="700x130" name="Radii & Borders" subtitle="Corner radius scale and semantic roles" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 20px; background: var(--bg-default); font-family: var(--font-sans); }
+  .row { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; }
+  .swatch { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .box { width: 52px; height: 52px; background: var(--color-teal-100); border: 2px solid var(--color-teal-400); }
+  .label { font-size: 9px; font-family: var(--font-mono); color: var(--fg-muted); text-align: center; }
+  .token { font-size: 8px; color: var(--fg-subtle); text-align: center; }
+</style>
+</head>
+<body>
+<div class="row">
+  <div class="swatch"><div class="box" style="border-radius:0;"></div><div class="label">0</div><div class="token">--radius-none</div></div>
+  <div class="swatch"><div class="box" style="border-radius:2px;"></div><div class="label">2px</div><div class="token">--radius-xs</div></div>
+  <div class="swatch"><div class="box" style="border-radius:4px;"></div><div class="label">4px</div><div class="token">--radius-sm</div></div>
+  <div class="swatch"><div class="box" style="border-radius:6px;"></div><div class="label">6px</div><div class="token">--radius-md</div></div>
+  <div class="swatch"><div class="box" style="border-radius:8px;"></div><div class="label">8px</div><div class="token">--radius-lg · card</div></div>
+  <div class="swatch"><div class="box" style="border-radius:12px;"></div><div class="label">12px</div><div class="token">--radius-xl · dialog</div></div>
+  <div class="swatch"><div class="box" style="border-radius:16px;"></div><div class="label">16px</div><div class="token">--radius-2xl</div></div>
+  <div class="swatch"><div class="box" style="border-radius:9999px; width:52px; height:52px;"></div><div class="label">full</div><div class="token">--radius-full · badge</div></div>
+</div>
+</body>
+</html>

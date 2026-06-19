@@ -1,0 +1,51 @@
+<!-- @dsCard group="Colors" viewport="700x180" name="Semantic Role Aliases" subtitle="Surface, foreground, border and text tokens" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 20px; background: var(--bg-default); font-family: var(--font-sans); }
+  .section { margin-bottom: 16px; }
+  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 6px; }
+  .row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .token-chip { display: flex; align-items: center; gap: 7px; padding: 5px 10px 5px 6px; border: 1px solid var(--border-muted); border-radius: 6px; background: var(--bg-subtle); }
+  .chip-swatch { width: 20px; height: 20px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.07); flex-shrink: 0; }
+  .chip-name { font-size: 10px; font-family: var(--font-mono); color: var(--fg-default); white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="section">
+  <div class="section-label">Foreground</div>
+  <div class="row">
+    <div class="token-chip"><div class="chip-swatch" style="background:var(--fg-default);"></div><span class="chip-name">--fg-default</span></div>
+    <div class="token-chip"><div class="chip-swatch" style="background:var(--fg-muted);"></div><span class="chip-name">--fg-muted</span></div>
+    <div class="token-chip"><div class="chip-swatch" style="background:var(--fg-subtle);"></div><span class="chip-name">--fg-subtle</span></div>
+    <div class="token-chip"><div class="chip-swatch" style="background:var(--fg-accent);"></div><span class="chip-name">--fg-accent</span></div>
+    <div class="token-chip"><div class="chip-swatch" style="background:var(--fg-gold);"></div><span class="chip-name">--fg-gold</span></div>
+    <div class="token-chip"><div class="chip-swatch" style="background:var(--fg-on-emphasis);border-color:#ccc;"></div><span class="chip-name">--fg-on-emphasis</span></div>
+  </div>
+</div>
+<div class="section">
+  <div class="section-label">Surface & Background</div>
+  <div class="row">
+    <div class="token-chip"><div class="chip-swatch" style="background:var(--bg-default);border-color:#ddd;"></div><span class="chip-name">--bg-default</span></div>
+    <div class="token-chip"><div class="chip-swatch" style="background:var(--bg-subtle);border-color:#ddd;"></div><span class="chip-name">--bg-subtle</span></div>
+    <div class="token-chip"><div class="chip-swatch" style="background:var(--bg-muted);"></div><span class="chip-name">--bg-muted</span></div>
+    <div class="token-chip"><div class="chip-swatch" style="background:var(--bg-accent);border-color:#cde;"></div><span class="chip-name">--bg-accent</span></div>
+    <div class="token-chip"><div class="chip-swatch" style="background:var(--bg-emphasis);"></div><span class="chip-name">--bg-emphasis</span></div>
+    <div class="token-chip"><div class="chip-swatch" style="background:var(--surface-sidebar);"></div><span class="chip-name">--surface-sidebar</span></div>
+  </div>
+</div>
+<div class="section">
+  <div class="section-label">Border</div>
+  <div class="row">
+    <div class="token-chip"><div class="chip-swatch" style="background:var(--border-muted);"></div><span class="chip-name">--border-muted</span></div>
+    <div class="token-chip"><div class="chip-swatch" style="background:var(--border-default);"></div><span class="chip-name">--border-default</span></div>
+    <div class="token-chip"><div class="chip-swatch" style="background:var(--border-strong);"></div><span class="chip-name">--border-strong</span></div>
+    <div class="token-chip"><div class="chip-swatch" style="background:var(--border-accent);"></div><span class="chip-name">--border-accent</span></div>
+    <div class="token-chip"><div class="chip-swatch" style="background:var(--border-gold);"></div><span class="chip-name">--border-gold</span></div>
+  </div>
+</div>
+</body>
+</html>

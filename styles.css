@@ -1,0 +1,11 @@
+/* ============================================================
+   Legal Flow Doctor — Global Stylesheet Entry Point
+   Import this single file in any consuming project.
+   ============================================================ */
+
+@import './tokens/typography.css';
+@import './tokens/colors.css';
+@import './tokens/spacing.css';
+@import './tokens/radii.css';
+@import './tokens/shadows.css';
+@import './tokens/motion.css';

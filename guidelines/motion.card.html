@@ -1,0 +1,39 @@
+<!-- @dsCard group="Brand" viewport="700x160" name="Motion" subtitle="Duration and easing tokens — no decorative animation" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 20px; background: var(--bg-default); font-family: var(--font-sans); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .group-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 8px; }
+  .token-row { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border-muted); }
+  .token-row:last-child { border-bottom: none; }
+  .tok-name { font-family: var(--font-mono); font-size: 10px; color: var(--fg-default); }
+  .tok-val { font-family: var(--font-mono); font-size: 10px; color: var(--fg-accent); }
+</style>
+</head>
+<body>
+<div class="grid">
+  <div>
+    <div class="group-label">Duration</div>
+    <div class="token-row"><span class="tok-name">--duration-instant</span><span class="tok-val">50ms</span></div>
+    <div class="token-row"><span class="tok-name">--duration-fast</span><span class="tok-val">100ms</span></div>
+    <div class="token-row"><span class="tok-name">--duration-normal</span><span class="tok-val">175ms</span></div>
+    <div class="token-row"><span class="tok-name">--duration-slow</span><span class="tok-val">300ms</span></div>
+    <div class="token-row"><span class="tok-name">--duration-slower</span><span class="tok-val">450ms</span></div>
+    <div class="token-row"><span class="tok-name">--duration-slowest</span><span class="tok-val">600ms</span></div>
+  </div>
+  <div>
+    <div class="group-label">Easing</div>
+    <div class="token-row"><span class="tok-name">--ease-linear</span><span class="tok-val">linear</span></div>
+    <div class="token-row"><span class="tok-name">--ease-in</span><span class="tok-val">cubic(.4,0,1,1)</span></div>
+    <div class="token-row"><span class="tok-name">--ease-out</span><span class="tok-val">cubic(0,0,.2,1)</span></div>
+    <div class="token-row"><span class="tok-name">--ease-in-out</span><span class="tok-val">cubic(.4,0,.2,1)</span></div>
+    <div class="token-row"><span class="tok-name">--ease-spring</span><span class="tok-val">cubic(.34,1.56,.64,1)</span></div>
+    <div class="token-row"><span class="tok-name">--ease-bounce</span><span class="tok-val">cubic(.68,−.55,.27,1.55)</span></div>
+  </div>
+</div>
+</body>
+</html>

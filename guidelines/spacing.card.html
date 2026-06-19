@@ -1,0 +1,54 @@
+<!-- @dsCard group="Spacing" viewport="700x200" name="Spacing Scale" subtitle="4px grid — base to page-level tokens" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 20px; background: var(--bg-default); font-family: var(--font-sans); }
+  .row { display: flex; align-items: flex-end; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .swatch { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .bar { background: var(--color-teal-500); border-radius: 2px; width: 20px; }
+  .label { font-size: 9px; font-family: var(--font-mono); color: var(--fg-muted); text-align: center; white-space: nowrap; }
+  .token { font-size: 8px; color: var(--fg-subtle); text-align: center; }
+  .divider-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<div class="divider-label">Base Scale</div>
+<div class="row">
+  <div class="swatch"><div class="bar" style="height:2px;"></div><div class="label">2px</div><div class="token">0.5</div></div>
+  <div class="swatch"><div class="bar" style="height:4px;"></div><div class="label">4px</div><div class="token">1</div></div>
+  <div class="swatch"><div class="bar" style="height:6px;"></div><div class="label">6px</div><div class="token">1.5</div></div>
+  <div class="swatch"><div class="bar" style="height:8px;"></div><div class="label">8px</div><div class="token">2</div></div>
+  <div class="swatch"><div class="bar" style="height:10px;"></div><div class="label">10px</div><div class="token">2.5</div></div>
+  <div class="swatch"><div class="bar" style="height:12px;"></div><div class="label">12px</div><div class="token">3</div></div>
+  <div class="swatch"><div class="bar" style="height:16px;"></div><div class="label">16px</div><div class="token">4</div></div>
+  <div class="swatch"><div class="bar" style="height:20px;"></div><div class="label">20px</div><div class="token">5</div></div>
+  <div class="swatch"><div class="bar" style="height:24px;"></div><div class="label">24px</div><div class="token">6</div></div>
+  <div class="swatch"><div class="bar" style="height:28px;"></div><div class="label">28px</div><div class="token">7</div></div>
+  <div class="swatch"><div class="bar" style="height:32px;"></div><div class="label">32px</div><div class="token">8</div></div>
+  <div class="swatch"><div class="bar" style="height:40px;"></div><div class="label">40px</div><div class="token">10</div></div>
+  <div class="swatch"><div class="bar" style="height:48px;"></div><div class="label">48px</div><div class="token">12</div></div>
+  <div class="swatch"><div class="bar" style="height:56px;"></div><div class="label">56px</div><div class="token">14</div></div>
+  <div class="swatch"><div class="bar" style="height:64px;"></div><div class="label">64px</div><div class="token">16</div></div>
+  <div class="swatch"><div class="bar" style="height:80px;"></div><div class="label">80px</div><div class="token">20</div></div>
+  <div class="swatch"><div class="bar" style="height:96px;"></div><div class="label">96px</div><div class="token">24</div></div>
+</div>
+<div class="divider-label">Semantic Roles</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px;">
+  <div style="display:inline-flex;align-items:center;gap:6px;background:var(--bg-subtle);border:1px solid var(--border-muted);border-radius:5px;padding:4px 8px;">
+    <div style="width:var(--space-card-x);height:16px;background:var(--color-teal-200);border-radius:2px;"></div>
+    <span style="font-family:var(--font-mono);font-size:9px;color:var(--fg-muted);">--space-card-x 24px</span>
+  </div>
+  <div style="display:inline-flex;align-items:center;gap:6px;background:var(--bg-subtle);border:1px solid var(--border-muted);border-radius:5px;padding:4px 8px;">
+    <div style="width:var(--space-card-y);height:16px;background:var(--color-navy-200);border-radius:2px;"></div>
+    <span style="font-family:var(--font-mono);font-size:9px;color:var(--fg-muted);">--space-card-y 20px</span>
+  </div>
+  <div style="display:inline-flex;align-items:center;gap:6px;background:var(--bg-subtle);border:1px solid var(--border-muted);border-radius:5px;padding:4px 8px;">
+    <div style="width:var(--space-page-x);height:16px;background:var(--color-gold-200);border-radius:2px;"></div>
+    <span style="font-family:var(--font-mono);font-size:9px;color:var(--fg-muted);">--space-page-x 32px</span>
+  </div>
+</div>
+</body>
+</html>

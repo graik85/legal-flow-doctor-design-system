@@ -1,0 +1,149 @@
+/* ============================================================
+   Legal Flow Doctor — Color Tokens
+   ============================================================ */
+
+:root {
+
+  /* ── Brand Navy ─────────────────────────────────────────── */
+  --color-navy-950: #040c18;
+  --color-navy-900: #0f2137;
+  --color-navy-800: #162e4d;
+  --color-navy-700: #1d3a61;
+  --color-navy-600: #244876;
+  --color-navy-500: #2e5d96;
+  --color-navy-400: #5882b5;
+  --color-navy-300: #8aabd0;
+  --color-navy-200: #c0d2e7;
+  --color-navy-100: #dfe8f2;
+  --color-navy-50:  #f0f5fb;
+
+  /* ── Brand Teal ─────────────────────────────────────────── */
+  --color-teal-900: #073630;
+  --color-teal-800: #0c5149;
+  --color-teal-700: #106b61;
+  --color-teal-600: #14867a;
+  --color-teal-500: #1aa395;
+  --color-teal-400: #2dbfaf;
+  --color-teal-300: #5dd4c6;
+  --color-teal-200: #9ee8de;
+  --color-teal-100: #d0f4f0;
+  --color-teal-50:  #edfaf8;
+
+  /* ── Brand Gold ─────────────────────────────────────────── */
+  --color-gold-900: #5c3d0a;
+  --color-gold-700: #8b5e18;
+  --color-gold-600: #a8752a;
+  --color-gold-500: #c9943a;
+  --color-gold-400: #d9ae62;
+  --color-gold-200: #f0dbb0;
+  --color-gold-100: #faf0d8;
+  --color-gold-50:  #fdfaf2;
+
+  /* ── Neutral Gray ───────────────────────────────────────── */
+  --color-gray-950: #0d0f12;
+  --color-gray-900: #1a1d22;
+  --color-gray-800: #2c3038;
+  --color-gray-700: #424852;
+  --color-gray-600: #5a6170;
+  --color-gray-500: #737b8c;
+  --color-gray-400: #9399a6;
+  --color-gray-300: #b8bdc8;
+  --color-gray-200: #d5d9e0;
+  --color-gray-150: #e2e5ec;
+  --color-gray-100: #eceff4;
+  --color-gray-50:  #f5f7fa;
+  --color-white:    #ffffff;
+  --color-cream:    #faf9f7;
+
+  /* ── Semantic: Success ──────────────────────────────────── */
+  --color-success-800: #104d29;
+  --color-success-700: #166534;
+  --color-success-600: #1a8045;
+  --color-success-500: #22a35a;
+  --color-success-400: #4bbd7b;
+  --color-success-200: #bbf0d2;
+  --color-success-100: #dcfaec;
+  --color-success-50:  #f0fdf6;
+
+  /* ── Semantic: Warning ──────────────────────────────────── */
+  --color-warning-800: #723800;
+  --color-warning-700: #974d00;
+  --color-warning-500: #d97706;
+  --color-warning-400: #f59e0b;
+  --color-warning-200: #fde68a;
+  --color-warning-100: #fef9c3;
+  --color-warning-50:  #fffdf0;
+
+  /* ── Semantic: Danger ───────────────────────────────────── */
+  --color-danger-800: #7f1d1d;
+  --color-danger-700: #991b1b;
+  --color-danger-500: #dc2626;
+  --color-danger-400: #f87171;
+  --color-danger-200: #fecaca;
+  --color-danger-100: #fee2e2;
+  --color-danger-50:  #fef2f2;
+
+  /* ── Semantic: Info ─────────────────────────────────────── */
+  --color-info-800:   #1e3a8a;
+  --color-info-600:   #1d4ed8;
+  --color-info-500:   #3b82f6;
+  --color-info-200:   #bfdbfe;
+  --color-info-100:   #dbeafe;
+  --color-info-50:    #eff6ff;
+
+  /* ── Semantic Role Aliases ──────────────────────────────── */
+  --fg-default:        var(--color-navy-900);
+  --fg-muted:          var(--color-gray-600);
+  --fg-subtle:         var(--color-gray-400);
+  --fg-disabled:       var(--color-gray-300);
+  --fg-on-emphasis:    var(--color-white);
+  --fg-accent:         var(--color-teal-600);
+  --fg-accent-strong:  var(--color-teal-700);
+  --fg-gold:           var(--color-gold-600);
+  --fg-link:           var(--color-teal-700);
+  --fg-link-hover:     var(--color-teal-600);
+
+  --bg-default:        var(--color-white);
+  --bg-cream:          var(--color-cream);
+  --bg-subtle:         var(--color-gray-50);
+  --bg-muted:          var(--color-gray-100);
+  --bg-emphasis:       var(--color-navy-900);
+  --bg-accent:         var(--color-teal-50);
+  --bg-accent-muted:   var(--color-teal-100);
+  --bg-gold-subtle:    var(--color-gold-50);
+
+  --border-default:    var(--color-gray-200);
+  --border-muted:      var(--color-gray-150);
+  --border-strong:     var(--color-gray-300);
+  --border-accent:     var(--color-teal-300);
+  --border-emphasis:   var(--color-navy-900);
+  --border-gold:       var(--color-gold-400);
+
+  --surface-default:   var(--color-white);
+  --surface-raised:    var(--color-white);
+  --surface-overlay:   var(--color-white);
+  --surface-inset:     var(--color-gray-50);
+  --surface-sidebar:   var(--color-navy-900);
+  --surface-accent:    var(--color-teal-50);
+
+  /* ── Status Colors (case states) ────────────────────────── */
+  --status-active-bg:    var(--color-success-100);
+  --status-active-fg:    var(--color-success-700);
+  --status-active-ring:  var(--color-success-400);
+
+  --status-pending-bg:   var(--color-warning-100);
+  --status-pending-fg:   var(--color-warning-700);
+  --status-pending-ring: var(--color-warning-400);
+
+  --status-closed-bg:    var(--color-gray-100);
+  --status-closed-fg:    var(--color-gray-600);
+  --status-closed-ring:  var(--color-gray-300);
+
+  --status-review-bg:    var(--color-info-100);
+  --status-review-fg:    var(--color-info-600);
+  --status-review-ring:  var(--color-info-500);
+
+  --status-urgent-bg:    var(--color-danger-100);
+  --status-urgent-fg:    var(--color-danger-700);
+  --status-urgent-ring:  var(--color-danger-400);
+}

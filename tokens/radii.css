@@ -1,0 +1,31 @@
+/* ============================================================
+   Legal Flow Doctor — Border Radius Tokens
+   ============================================================ */
+
+:root {
+
+  /* ── Base Scale ─────────────────────────────────────────── */
+  --radius-none:  0;
+  --radius-xs:    2px;
+  --radius-sm:    4px;
+  --radius-md:    6px;
+  --radius-lg:    8px;
+  --radius-xl:    12px;
+  --radius-2xl:   16px;
+  --radius-3xl:   24px;
+  --radius-full:  9999px;
+
+  /* ── Semantic Radii ─────────────────────────────────────── */
+  --radius-button:   var(--radius-md);
+  --radius-input:    var(--radius-md);
+  --radius-card:     var(--radius-lg);
+  --radius-card-lg:  var(--radius-xl);
+  --radius-badge:    var(--radius-full);
+  --radius-tag:      var(--radius-sm);
+  --radius-avatar:   var(--radius-full);
+  --radius-dialog:   var(--radius-xl);
+  --radius-dropdown: var(--radius-lg);
+  --radius-tooltip:  var(--radius-md);
+  --radius-tab:      var(--radius-sm);
+  --radius-icon-btn: var(--radius-md);
+}

@@ -1,0 +1,28 @@
+<!-- @dsCard group="Spacing" viewport="700x160" name="Shadows" subtitle="Navy-tinted shadow scale and focus rings" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 24px; background: var(--color-gray-100); font-family: var(--font-sans); }
+  .row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end; }
+  .swatch { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .box { width: 70px; height: 52px; background: var(--bg-default); border-radius: 6px; }
+  .label { font-size: 9px; font-family: var(--font-mono); color: var(--fg-muted); text-align: center; }
+</style>
+</head>
+<body>
+<div class="row">
+  <div class="swatch"><div class="box" style="box-shadow:none; border:1px solid var(--border-default);"></div><div class="label">none</div></div>
+  <div class="swatch"><div class="box" style="box-shadow:var(--shadow-xs);"></div><div class="label">xs · button</div></div>
+  <div class="swatch"><div class="box" style="box-shadow:var(--shadow-sm);"></div><div class="label">sm · card</div></div>
+  <div class="swatch"><div class="box" style="box-shadow:var(--shadow-md);"></div><div class="label">md · card:hover</div></div>
+  <div class="swatch"><div class="box" style="box-shadow:var(--shadow-lg);"></div><div class="label">lg · dropdown</div></div>
+  <div class="swatch"><div class="box" style="box-shadow:var(--shadow-xl);"></div><div class="label">xl · dialog</div></div>
+  <div class="swatch"><div class="box" style="box-shadow:var(--shadow-2xl);"></div><div class="label">2xl</div></div>
+  <div class="swatch"><div class="box" style="box-shadow:var(--shadow-button-primary); background:var(--color-teal-600);"></div><div class="label">primary btn</div></div>
+  <div class="swatch"><div class="box" style="box-shadow:var(--focus-ring); border:1.5px solid var(--color-teal-500);"></div><div class="label">focus ring</div></div>
+</div>
+</body>
+</html>

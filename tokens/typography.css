@@ -1,0 +1,100 @@
+/* ============================================================
+   Legal Flow Doctor — Typography Tokens
+   ============================================================
+   Fonts: Playfair Display (display/heading) + DM Sans (body/UI)
+          + JetBrains Mono (code/document references)
+   Note: Loaded via Google Fonts CDN. Supply local .ttf/.woff2
+         files if custom licensing is required.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+
+  /* ── Font Families ──────────────────────────────────────── */
+  --font-display:  'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-serif:    'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-sans:     'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:     'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+  /* ── Font Size Scale ────────────────────────────────────── */
+  --text-2xs:   0.625rem;   /* 10px */
+  --text-xs:    0.75rem;    /* 12px */
+  --text-sm:    0.875rem;   /* 14px */
+  --text-base:  1rem;       /* 16px */
+  --text-md:    1.125rem;   /* 18px */
+  --text-lg:    1.25rem;    /* 20px */
+  --text-xl:    1.5rem;     /* 24px */
+  --text-2xl:   1.875rem;   /* 30px */
+  --text-3xl:   2.25rem;    /* 36px */
+  --text-4xl:   3rem;       /* 48px */
+  --text-5xl:   3.75rem;    /* 60px */
+  --text-6xl:   4.5rem;     /* 72px */
+
+  /* ── Font Weights ───────────────────────────────────────── */
+  --weight-light:     300;
+  --weight-regular:   400;
+  --weight-medium:    500;
+  --weight-semibold:  600;
+  --weight-bold:      700;
+
+  /* ── Line Heights ───────────────────────────────────────── */
+  --leading-none:     1;
+  --leading-tight:    1.2;
+  --leading-snug:     1.35;
+  --leading-normal:   1.5;
+  --leading-relaxed:  1.65;
+  --leading-loose:    1.8;
+
+  /* ── Letter Spacing ─────────────────────────────────────── */
+  --tracking-tighter: -0.04em;
+  --tracking-tight:   -0.02em;
+  --tracking-normal:   0;
+  --tracking-wide:     0.03em;
+  --tracking-wider:    0.07em;
+  --tracking-widest:   0.14em;
+
+  /* ── Semantic Type Roles ────────────────────────────────── */
+
+  /* Display — hero headings, section titles */
+  --type-display-font:     var(--font-display);
+  --type-display-weight:   var(--weight-semibold);
+  --type-display-leading:  var(--leading-tight);
+  --type-display-tracking: var(--tracking-tight);
+
+  /* Heading — h1–h4 within content */
+  --type-heading-font:     var(--font-serif);
+  --type-heading-weight:   var(--weight-semibold);
+  --type-heading-leading:  var(--leading-snug);
+  --type-heading-tracking: var(--tracking-tight);
+
+  /* Body — long-form reading */
+  --type-body-font:        var(--font-sans);
+  --type-body-weight:      var(--weight-regular);
+  --type-body-leading:     var(--leading-relaxed);
+  --type-body-tracking:    var(--tracking-normal);
+
+  /* UI — labels, buttons, nav items */
+  --type-ui-font:          var(--font-sans);
+  --type-ui-weight:        var(--weight-medium);
+  --type-ui-leading:       var(--leading-normal);
+  --type-ui-tracking:      var(--tracking-normal);
+
+  /* Label — form labels, table headers */
+  --type-label-font:       var(--font-sans);
+  --type-label-weight:     var(--weight-semibold);
+  --type-label-leading:    var(--leading-tight);
+  --type-label-tracking:   var(--tracking-wide);
+
+  /* Caption — metadata, timestamps, footnotes */
+  --type-caption-font:     var(--font-sans);
+  --type-caption-weight:   var(--weight-regular);
+  --type-caption-leading:  var(--leading-normal);
+  --type-caption-tracking: var(--tracking-normal);
+
+  /* Code — document references, clause IDs, citations */
+  --type-code-font:        var(--font-mono);
+  --type-code-weight:      var(--weight-regular);
+  --type-code-leading:     var(--leading-relaxed);
+  --type-code-tracking:    var(--tracking-normal);
+}

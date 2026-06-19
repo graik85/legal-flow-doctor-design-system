@@ -1,0 +1,78 @@
+<!-- @dsCard group="Colors" viewport="700x200" name="Semantic Colors" subtitle="Status, feedback and case-state palettes" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 20px; background: var(--bg-default); font-family: var(--font-sans); }
+  .row { display: flex; gap: 12px; margin-bottom: 12px; }
+  .group { flex: 1; }
+  .group-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 6px; }
+  .swatches { display: flex; gap: 3px; }
+  .sw { flex: 1; height: 36px; border-radius: 4px; }
+  .sw-sm { height: 24px; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; margin: 3px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .pills-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="row">
+  <div class="group">
+    <div class="group-label">Success</div>
+    <div class="swatches">
+      <div class="sw" style="background:#104d29;"></div>
+      <div class="sw" style="background:#166534;"></div>
+      <div class="sw" style="background:#22a35a;"></div>
+      <div class="sw" style="background:#4bbd7b;"></div>
+      <div class="sw" style="background:#bbf0d2; border:1px solid #d5d9e0;"></div>
+      <div class="sw" style="background:#dcfaec; border:1px solid #d5d9e0;"></div>
+    </div>
+  </div>
+  <div class="group">
+    <div class="group-label">Warning</div>
+    <div class="swatches">
+      <div class="sw" style="background:#723800;"></div>
+      <div class="sw" style="background:#974d00;"></div>
+      <div class="sw" style="background:#d97706;"></div>
+      <div class="sw" style="background:#f59e0b;"></div>
+      <div class="sw" style="background:#fde68a; border:1px solid #d5d9e0;"></div>
+      <div class="sw" style="background:#fef9c3; border:1px solid #d5d9e0;"></div>
+    </div>
+  </div>
+  <div class="group">
+    <div class="group-label">Danger</div>
+    <div class="swatches">
+      <div class="sw" style="background:#7f1d1d;"></div>
+      <div class="sw" style="background:#991b1b;"></div>
+      <div class="sw" style="background:#dc2626;"></div>
+      <div class="sw" style="background:#f87171;"></div>
+      <div class="sw" style="background:#fecaca; border:1px solid #d5d9e0;"></div>
+      <div class="sw" style="background:#fee2e2; border:1px solid #d5d9e0;"></div>
+    </div>
+  </div>
+  <div class="group">
+    <div class="group-label">Info</div>
+    <div class="swatches">
+      <div class="sw" style="background:#1e3a8a;"></div>
+      <div class="sw" style="background:#1d4ed8;"></div>
+      <div class="sw" style="background:#3b82f6;"></div>
+      <div class="sw" style="background:#93c5fd;"></div>
+      <div class="sw" style="background:#bfdbfe; border:1px solid #d5d9e0;"></div>
+      <div class="sw" style="background:#eff6ff; border:1px solid #d5d9e0;"></div>
+    </div>
+  </div>
+</div>
+<div style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--fg-muted);margin-bottom:6px;">Case Status Pills</div>
+<div class="pills-row">
+  <span class="pill" style="background:#dcfaec;color:#166534;"><span class="dot" style="background:#22a35a;"></span>Active</span>
+  <span class="pill" style="background:#fef9c3;color:#974d00;"><span class="dot" style="background:#d97706;"></span>Pending</span>
+  <span class="pill" style="background:#dbeafe;color:#1d4ed8;"><span class="dot" style="background:#3b82f6;"></span>In Review</span>
+  <span class="pill" style="background:#eceff4;color:#5a6170;"><span class="dot" style="background:#737b8c;"></span>Closed</span>
+  <span class="pill" style="background:#fee2e2;color:#991b1b;"><span class="dot" style="background:#dc2626;"></span>Urgent</span>
+  <span class="pill" style="background:#d0f4f0;color:#106b61;"><span class="dot" style="background:#14867a;"></span>Settled</span>
+  <span class="pill" style="background:#dfe8f2;color:#1d3a61;"><span class="dot" style="background:#244876;"></span>Drafting</span>
+</div>
+</body>
+</html>

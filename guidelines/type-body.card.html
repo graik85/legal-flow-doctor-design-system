@@ -1,0 +1,67 @@
+<!-- @dsCard group="Type" viewport="700x300" name="Body & UI" subtitle="DM Sans — readable prose and interface text" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 24px; background: var(--bg-default); font-family: var(--font-sans); }
+  .specimen { margin-bottom: 16px; display: flex; align-items: baseline; gap: 16px; border-bottom: 1px solid var(--border-muted); padding-bottom: 14px; }
+  .specimen:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .meta { flex-shrink: 0; width: 120px; }
+  .meta-role { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-accent); }
+  .meta-spec { font-size: 10px; font-family: var(--font-mono); color: var(--fg-muted); margin-top: 2px; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<div class="specimen">
+  <div class="meta">
+    <div class="meta-role">Body LG</div>
+    <div class="meta-spec">18px / regular<br>1.65 leading<br>DM Sans</div>
+  </div>
+  <div style="font-family:var(--font-sans);font-size:var(--text-md);font-weight:var(--weight-regular);line-height:var(--leading-relaxed);color:var(--fg-default);max-width:480px;">Legal Flow Doctor transforms the way your firm handles matters — from intake to resolution, every workflow is diagnosed and optimized automatically.</div>
+</div>
+
+<div class="specimen">
+  <div class="meta">
+    <div class="meta-role">Body Base</div>
+    <div class="meta-spec">16px / regular<br>1.65 leading<br>DM Sans</div>
+  </div>
+  <div style="font-family:var(--font-sans);font-size:var(--text-base);line-height:var(--leading-relaxed);color:var(--fg-default);max-width:480px;">Review all documents associated with this matter. Missing signatures are flagged automatically and sent for follow-up within 24 hours.</div>
+</div>
+
+<div class="specimen">
+  <div class="meta">
+    <div class="meta-role">UI Label</div>
+    <div class="meta-spec">14px / semibold<br>+0.03em track<br>DM Sans</div>
+  </div>
+  <div style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:var(--weight-semibold);letter-spacing:0.03em;color:var(--fg-default);">Matter Type</div>
+</div>
+
+<div class="specimen">
+  <div class="meta">
+    <div class="meta-role">Caption</div>
+    <div class="meta-spec">12px / regular<br>DM Sans</div>
+  </div>
+  <div style="font-family:var(--font-sans);font-size:var(--text-xs);color:var(--fg-muted);line-height:var(--leading-normal);">Last updated 3 hours ago · Assigned to Sarah Chen</div>
+</div>
+
+<div class="specimen">
+  <div class="meta">
+    <div class="meta-role">Overline</div>
+    <div class="meta-spec">10px / bold<br>+0.14em track<br>uppercase</div>
+  </div>
+  <div style="font-family:var(--font-sans);font-size:var(--text-2xs);font-weight:var(--weight-bold);letter-spacing:var(--tracking-widest);text-transform:uppercase;color:var(--fg-muted);">Practice Area</div>
+</div>
+
+<div class="specimen">
+  <div class="meta">
+    <div class="meta-role">Link</div>
+    <div class="meta-spec">14px / medium<br>teal, underline</div>
+  </div>
+  <div style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:var(--weight-medium);color:var(--fg-link);text-decoration:underline;text-decoration-color:var(--color-teal-300);text-underline-offset:2px;">View full matter history →</div>
+</div>
+
+</body>
+</html>

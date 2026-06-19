@@ -1,0 +1,65 @@
+<!-- @dsCard group="Brand" viewport="700x220" name="Logo" subtitle="Lockups, icon mark, and usage variants" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; padding: 20px; background: var(--bg-default); font-family: var(--font-sans); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .cell { border-radius: 8px; padding: 20px 16px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-muted); }
+  .cell-dark { background: var(--color-navy-900); border-color: var(--color-navy-800); }
+  .cell-accent { background: var(--color-teal-50); border-color: var(--color-teal-200); }
+  .cell-label { font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-muted); margin-top: 6px; text-align: center; }
+  .wordmark { font-family: var(--font-serif); font-size: 20px; font-weight: 600; color: var(--fg-default); letter-spacing: -0.02em; }
+  .wordmark-sub { font-family: var(--font-sans); font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-accent); margin-top: -2px; }
+  .wordmark-white { color: white; }
+  .wordmark-sub-white { color: var(--color-teal-300); }
+</style>
+</head>
+<body>
+<div class="grid">
+  <div>
+    <div class="cell">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <img src="../assets/logo-icon.svg" width="32" height="32" alt="LFD icon">
+          <div>
+            <div class="wordmark">Legal Flow</div>
+            <div class="wordmark-sub">Doctor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cell-label">Full lockup — light bg</div>
+  </div>
+  <div>
+    <div class="cell cell-dark">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <img src="../assets/logo-icon.svg" width="32" height="32" alt="LFD icon">
+          <div>
+            <div class="wordmark wordmark-white">Legal Flow</div>
+            <div class="wordmark-sub wordmark-sub-white">Doctor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cell-label">Full lockup — dark bg</div>
+  </div>
+  <div>
+    <div class="cell cell-accent">
+      <img src="../assets/logo-icon.svg" width="48" height="48" alt="LFD icon">
+    </div>
+    <div class="cell-label">Icon mark only</div>
+  </div>
+</div>
+<div style="margin-top:12px;padding:12px 16px;background:var(--bg-subtle);border-radius:6px;border:1px solid var(--border-muted);">
+  <span style="font-size:10px;font-family:var(--font-mono);color:var(--fg-muted);">
+    <strong style="color:var(--fg-default);">Clearspace:</strong> min 8px · 
+    <strong style="color:var(--fg-default);">Min size:</strong> 24px icon, 120px lockup · 
+    <strong style="color:var(--fg-default);">Fonts:</strong> Playfair Display (Legal Flow) + DM Sans (DOCTOR)
+  </span>
+</div>
+</body>
+</html>

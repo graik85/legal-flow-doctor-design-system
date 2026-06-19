@@ -1,0 +1,52 @@
+/* ============================================================
+   Legal Flow Doctor — Shadow Tokens
+   ============================================================
+   Shadows use the navy brand color at low opacity for warmth,
+   avoiding generic black-based shadows.
+   ============================================================ */
+
+:root {
+
+  /* ── Base Scale ─────────────────────────────────────────── */
+  --shadow-none:  none;
+
+  --shadow-xs:    0 1px 2px 0 rgba(15, 33, 55, 0.05);
+
+  --shadow-sm:    0 1px 3px 0 rgba(15, 33, 55, 0.08),
+                  0 1px 2px -1px rgba(15, 33, 55, 0.04);
+
+  --shadow-md:    0 4px 6px -1px rgba(15, 33, 55, 0.08),
+                  0 2px 4px -2px rgba(15, 33, 55, 0.04);
+
+  --shadow-lg:    0 10px 15px -3px rgba(15, 33, 55, 0.10),
+                  0 4px 6px -4px rgba(15, 33, 55, 0.05);
+
+  --shadow-xl:    0 20px 25px -5px rgba(15, 33, 55, 0.12),
+                  0 8px 10px -6px rgba(15, 33, 55, 0.05);
+
+  --shadow-2xl:   0 25px 50px -12px rgba(15, 33, 55, 0.20);
+
+  --shadow-inner: inset 0 2px 4px 0 rgba(15, 33, 55, 0.06);
+
+  /* ── Semantic Shadows ───────────────────────────────────── */
+  --shadow-card:          var(--shadow-sm);
+  --shadow-card-hover:    var(--shadow-md);
+  --shadow-card-raised:   var(--shadow-lg);
+
+  --shadow-button:        var(--shadow-xs);
+  --shadow-button-primary: 0 2px 8px -1px rgba(20, 134, 122, 0.35);
+
+  --shadow-dialog:        var(--shadow-2xl);
+  --shadow-dropdown:      var(--shadow-lg);
+  --shadow-tooltip:       var(--shadow-md);
+  --shadow-sidebar:       4px 0 16px -4px rgba(15, 33, 55, 0.12);
+
+  /* ── Glow / Focus rings ─────────────────────────────────── */
+  --focus-ring:           0 0 0 3px rgba(20, 134, 122, 0.25);
+  --focus-ring-danger:    0 0 0 3px rgba(220, 38, 38, 0.25);
+  --focus-ring-inset:     inset 0 0 0 2px var(--color-teal-500);
+
+  /* ── Accent glow (teal) ─────────────────────────────────── */
+  --glow-teal-sm:  0 0 12px rgba(20, 134, 122, 0.20);
+  --glow-teal-md:  0 0 24px rgba(20, 134, 122, 0.25);
+}

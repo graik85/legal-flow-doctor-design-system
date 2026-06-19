@@ -1,0 +1,188 @@
+<!-- @dsCard group="Components" viewport="700x840" name="Core Components" subtitle="Buttons · Badges · Status · Tags · Inputs · Avatars · Cards" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; padding: 20px; background: var(--bg-default); font-family: var(--font-sans); }
+  @keyframes lfd-spin { to { transform: rotate(360deg); } }
+  @keyframes lfd-pulse { 0%,100%{opacity:1}50%{opacity:.5} }
+  .sec { margin-bottom: 18px; }
+  .sec-label { font-size: 10px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const NS = window.LegalFlowDoctorDesignSystem_fa7d52;
+const { Button, Badge, Card, Input, Avatar, Select, Tag, StatusPill, Divider } = NS;
+
+const PlusIcon = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 5v14M5 12h14"/></svg>;
+const SearchIcon = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>;
+
+const F = ({ style, children }) => <div style={{ display:'flex', alignItems:'center', gap:8, flexWrap:'wrap', ...style }}>{children}</div>;
+const Sec = ({ label, children }) => (
+  <div className="sec">
+    <div className="sec-label">{label}</div>
+    {children}
+  </div>
+);
+
+function App() {
+  return (
+    <div>
+      <Sec label="Buttons — Variants">
+        <F>
+          <Button variant="primary">Primary</Button>
+          <Button variant="secondary">Secondary</Button>
+          <Button variant="ghost">Ghost</Button>
+          <Button variant="outline">Outline</Button>
+          <Button variant="destructive">Destructive</Button>
+          <Button variant="gold">Gold</Button>
+        </F>
+      </Sec>
+
+      <Sec label="Buttons — Sizes & States">
+        <F>
+          <Button size="sm">Small</Button>
+          <Button size="md">Medium</Button>
+          <Button size="lg">Large</Button>
+          <Button variant="primary" iconLeft={<PlusIcon/>}>Add Matter</Button>
+          <Button variant="primary" loading>Saving…</Button>
+          <Button variant="secondary" disabled>Disabled</Button>
+        </F>
+      </Sec>
+
+      <Divider spacing="sm" />
+
+      <Sec label="Badges">
+        <F>
+          <Badge variant="default">Default</Badge>
+          <Badge variant="active" dot>Active</Badge>
+          <Badge variant="pending" dot>Pending</Badge>
+          <Badge variant="review" dot>In Review</Badge>
+          <Badge variant="urgent" dot>Urgent</Badge>
+          <Badge variant="closed">Closed</Badge>
+          <Badge variant="teal">Teal</Badge>
+          <Badge variant="navy">Navy</Badge>
+          <Badge variant="gold">Gold</Badge>
+          <Badge variant="active" size="sm" dot>Active sm</Badge>
+          <Badge variant="pending" size="lg" dot>Pending lg</Badge>
+        </F>
+      </Sec>
+
+      <Sec label="Status Pills">
+        <F>
+          <StatusPill status="active" />
+          <StatusPill status="pending" />
+          <StatusPill status="review" />
+          <StatusPill status="urgent" />
+          <StatusPill status="closed" />
+          <StatusPill status="drafting" />
+          <StatusPill status="settled" />
+        </F>
+        <F style={{ marginTop: 6 }}>
+          <StatusPill status="active" size="sm" />
+          <StatusPill status="pending" size="sm" />
+          <StatusPill status="active" size="lg" />
+          <StatusPill status="urgent" size="lg" label="High Priority" />
+        </F>
+      </Sec>
+
+      <Sec label="Tags">
+        <F>
+          <Tag>Default</Tag>
+          <Tag color="teal">Commercial</Tag>
+          <Tag color="navy">Litigation</Tag>
+          <Tag color="gold">Premium</Tag>
+          <Tag color="green">Settled</Tag>
+          <Tag color="amber">Discovery</Tag>
+          <Tag color="red">Urgent</Tag>
+          <Tag color="blue">Civil Law</Tag>
+          <Tag color="teal" removable>Removable</Tag>
+        </F>
+      </Sec>
+
+      <Divider spacing="sm" />
+
+      <Sec label="Inputs">
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:12 }}>
+          <Input label="Case Number" placeholder="LFD-2024-0091" />
+          <Input label="Claim Amount" prefix="$" placeholder="0.00" />
+          <Input label="Search" suffix={<SearchIcon/>} placeholder="Search matters…" />
+          <Input label="Jurisdiction" defaultValue="SDNY" state="success" helperText="Verified" />
+          <Input label="Court" errorText="This field is required" placeholder="Enter court name" />
+          <Input label="Client (read-only)" readOnly defaultValue="Empresa García S.A." />
+        </div>
+      </Sec>
+
+      <Sec label="Select">
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:12 }}>
+          <Select label="Matter Type" options={['Commercial','Litigation','Labor','Family','Criminal','Civil']} placeholder="Select type…" />
+          <Select label="Assigned To" options={['Sarah Chen','Miguel Torres','Ana Martínez','Roberto Pérez']} />
+          <Select label="Status" options={['Active','Pending','In Review','Closed','Urgent']} />
+        </div>
+      </Sec>
+
+      <Divider spacing="sm" />
+
+      <Sec label="Avatars">
+        <F>
+          <Avatar name="Sarah Chen" size="xs" />
+          <Avatar name="Miguel Torres" size="sm" status="online" />
+          <Avatar name="Sarah Chen" size="md" status="online" />
+          <Avatar name="Roberto Pérez" size="lg" status="away" />
+          <Avatar name="Ana Martínez" size="xl" status="busy" />
+          <Avatar name="Julia Santos" size="2xl" />
+          <Avatar size="md" variant="outline" />
+        </F>
+      </Sec>
+
+      <Divider spacing="sm" />
+
+      <Sec label="Cards — Variants">
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:10 }}>
+          <Card padding="sm" header="Default Card">
+            <p style={{ margin:0, fontSize:'var(--text-sm)', color:'var(--fg-muted)', lineHeight:1.5 }}>Standard white surface with subtle border and shadow.</p>
+          </Card>
+          <Card variant="inset" padding="sm" header="Inset Card">
+            <p style={{ margin:0, fontSize:'var(--text-sm)', color:'var(--fg-muted)', lineHeight:1.5 }}>Recessed background for nested content.</p>
+          </Card>
+          <Card variant="accent" padding="sm" accent="teal">
+            <div style={{ fontSize:'var(--text-xs)', color:'var(--fg-muted)', marginBottom:4 }}>CASE NOTICE</div>
+            <p style={{ margin:0, fontSize:'var(--text-sm)', color:'var(--fg-default)', lineHeight:1.5 }}>Teal accent left border for important content.</p>
+          </Card>
+          <Card variant="gold" padding="sm" header="Premium Matter">
+            <p style={{ margin:0, fontSize:'var(--text-sm)', color:'var(--fg-muted)', lineHeight:1.5 }}>Gold tone for high-value matters.</p>
+          </Card>
+          <Card variant="emphasis" padding="sm" header={<span style={{color:'white'}}>Emphasis</span>}>
+            <p style={{ margin:0, fontSize:'var(--text-sm)', color:'rgba(255,255,255,0.6)', lineHeight:1.5 }}>Navy background for callouts.</p>
+          </Card>
+          <Card padding="sm" hover accent="danger">
+            <div style={{ fontSize:'var(--text-xs)', color:'var(--fg-muted)', marginBottom:4 }}>⚠ DEADLINE</div>
+            <p style={{ margin:0, fontSize:'var(--text-sm)', color:'var(--fg-default)', lineHeight:1.5 }}>Danger accent with hover lift.</p>
+          </Card>
+        </div>
+      </Sec>
+
+      <Sec label="Divider — Variants">
+        <Divider />
+        <Divider label="Section Break" />
+        <div style={{ display:'flex', gap:4, alignItems:'center', color:'var(--fg-muted)', fontSize:'var(--text-sm)' }}>
+          Left content <Divider orientation="vertical" /> Right content <Divider orientation="vertical" /> More content
+        </div>
+      </Sec>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
