@@ -10,16 +10,16 @@ function PlaceholderView({ title, subtitle, features, icon }) {
         {subtitle && <p style={{ margin: '0 0 24px', fontSize: '14px', color: 'var(--fg-muted)', fontFamily: 'var(--font-sans)', lineHeight: 1.6 }}>{subtitle}</p>}
         {features && features.length > 0 && (
           <div style={{ background: 'white', border: '1px solid var(--border-default)', borderRadius: '10px', padding: '20px 24px', boxShadow: 'var(--shadow-sm)', textAlign: 'left', marginBottom: '20px' }}>
-            <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--fg-muted)', letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: 'var(--font-sans)', marginBottom: '12px' }}>Features planificados</div>
+            <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--fg-muted)', letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: 'var(--font-sans)', marginBottom: '12px' }}>Features planificados</div>
             {features.map((f, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '7px 0', borderBottom: i < features.length - 1 ? '1px solid var(--border-muted)' : 'none' }}>
                 <div style={{ width: '18px', height: '18px', borderRadius: '50%', border: '2px dashed var(--color-teal-300)', flexShrink: 0 }} />
-                <span style={{ fontSize: '13px', color: 'var(--fg-default)', fontFamily: 'var(--font-sans)' }}>{f}</span>
+                <span style={{ fontSize: '14px', color: 'var(--fg-default)', fontFamily: 'var(--font-sans)' }}>{f}</span>
               </div>
             ))}
           </div>
         )}
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '999px', background: 'var(--color-navy-100)', color: 'var(--color-navy-800)', fontSize: '12px', fontWeight: 600, fontFamily: 'var(--font-sans)' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '999px', background: 'var(--color-navy-100)', color: 'var(--color-navy-800)', fontSize: '13px', fontWeight: 600, fontFamily: 'var(--font-sans)' }}>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           En desarrollo — próximamente
         </div>
@@ -127,16 +127,16 @@ function App() {
   };
 
   return (
-    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', fontFamily: 'var(--font-sans)' }}>
+    <div className="lfd-shell" style={{ display: 'flex', height: '100vh', overflow: 'hidden', fontFamily: 'var(--font-sans)' }}>
       <Sidebar currentView={view} onNavigate={handleNavigate} />
-      <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
-        {view === 'dashboard'    && <Dashboard onNavigate={handleNavigate} />}
+      <main className="lfd-main" style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+        {view === 'dashboard'    && <Dashboard onNavigate={handleNavigate} onSelectCase={handleSelectCase} />}
         {view === 'cases'        && <CaseList onSelectCase={handleSelectCase} />}
         {view === 'case-detail'  && <CaseDetail caseId={selectedCase || 'LFD-2024-0091'} onBack={handleBack} />}
         {view === 'agenda'       && <Agenda onNavigate={handleNavigate} />}
         {view === 'jurisprudencia' && <Jurisprudencia />}
         {placeholders[view]      && <PlaceholderView {...placeholders[view]} />}
-      </div>
+      </main>
     </div>
   );
 }
