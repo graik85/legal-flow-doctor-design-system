@@ -10,6 +10,16 @@ Legal Flow Doctor is a modern web-first SaaS for legal case management ("gestió
 - YouTube playlist: https://www.youtube.com/playlist?list=PL97I090YDX8c-_MubzqPvfP6gw6Um2Gcy
 - No Figma file or codebase was provided. The system is based on product analysis and category conventions.
 
+
+## 📦 Removed from EasyPanel on 2026-11-01
+
+The hosted preview was deleted from EasyPanel to clean up (it had no database and no cost of its own;
+it was already stopped). **This repo is enough to bring it back**:
+
+1. EasyPanel → new App from this repo (branch `main`), using the root `Dockerfile` (static nginx). No env vars.
+2. DNS and the auto-deploy webhook: same steps as the other MeteorBotsLab apps (internal notes, not
+   in this public repo). It used to answer at `legalflow.meteorbotslab.ai`.
+
 ---
 
 ## Products
